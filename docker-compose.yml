@@ -1,0 +1,31 @@
+services:
+  mongo:
+    image: mongo:7
+    container_name: shelf-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+  api:
+    build: .
+    container_name: shelf-api
+    depends_on:
+      - mongo
+    ports:
+      - "8000:8000"
+    environment:
+      MONGODB_URL: mongodb://mongo:27017
+      MONGODB_DATABASE: retail_shelf_intelligence
+      MODEL_WEIGHTS_PATH: /app/models/shelf_yolo.pt
+      UPLOAD_DIR: /app/data/uploads
+      AUDIT_ARTIFACT_DIR: /app/data/audit_artifacts
+      MLFLOW_TRACKING_URI: sqlite:////app/mlruns/mlflow.db
+    volumes:
+      - ./models:/app/models
+      - ./data/uploads:/app/data/uploads
+      - ./data/audit_artifacts:/app/data/audit_artifacts
+      - ./mlruns:/app/mlruns
+
+volumes:
+  mongo_data:

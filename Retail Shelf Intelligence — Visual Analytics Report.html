@@ -1,0 +1,3588 @@
+<!DOCTYPE html>
+<!-- saved from url=(0096)file:///C:/Users/PANDEY%20GAURAV/Desktop/Retail-Shelf-Intelligence/runs/report/shelf_report.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retail Shelf Intelligence — Visual Analytics Report</title>
+    <style>
+        :root {
+            --bg: #0d0a19;
+            --surface: rgba(32, 25, 57, 0.70);
+            --surface-hover: rgba(67, 49, 104, 0.72);
+            --surface-border: rgba(199, 181, 255, 0.19);
+            --text-main: #f6f2ff;
+            --text-muted: #b6b0c9;
+            --accent-cyan: #c3a6ff;
+            --accent-emerald: #6ee7c2;
+            --accent-amber: #ffc783;
+            --accent-rose: #ff91b8;
+            --accent-indigo: #91a8ff;
+            --radius-md: 10px;
+            --radius-lg: 16px;
+            --shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background:
+                radial-gradient(circle at 12% -5%, rgba(190, 117, 255, .23), transparent 34rem),
+                radial-gradient(circle at 91% 12%, rgba(246, 129, 181, .16), transparent 30rem),
+                linear-gradient(145deg, #0d0a19 0%, #141026 52%, #0d1422 100%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 24px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(115deg, rgba(43, 32, 78, .82), rgba(18, 23, 48, .70));
+            border: 1px solid var(--surface-border);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            margin-bottom: 28px;
+            box-shadow: 0 18px 48px rgba(3, 1, 13, .32), inset 0 1px 0 rgba(255, 255, 255, .06);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(18px) saturate(130%);
+        }
+
+        header::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 300px;
+            height: 100%;
+            background: radial-gradient(circle at top right, rgba(255, 139, 191, 0.25), transparent 70%);
+            pointer-events: none;
+        }
+
+        .title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 1.15rem;
+            color: var(--accent-cyan);
+            font-weight: 500;
+            margin-top: 4px;
+        }
+
+        .meta-text {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            margin-top: 12px;
+        }
+
+        /* Section Layout */
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin: 32px 0 16px 0;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-left: 4px solid var(--accent-cyan);
+            padding-left: 12px;
+        }
+
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 18px;
+            margin-bottom: 24px;
+        }
+
+        .card {
+            background-color: var(--surface);
+            border: 1px solid var(--surface-border);
+            border-radius: var(--radius-md);
+            padding: 22px;
+            box-shadow: var(--shadow);
+            transition: transform 0.15s ease, border-color 0.15s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            border-color: #3b4d75;
+        }
+
+        .card-label {
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+        }
+
+        .card-value {
+            font-size: 2.1rem;
+            font-weight: 800;
+            margin-top: 8px;
+            color: #ffffff;
+        }
+
+        .card-subtext {
+            font-size: 0.80rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .text-cyan { color: var(--accent-cyan); }
+        .text-emerald { color: var(--accent-emerald); }
+        .text-amber { color: var(--accent-amber); }
+        .text-rose { color: var(--accent-rose); }
+        .text-indigo { color: var(--accent-indigo); }
+
+        /* 2-Column Split Grids */
+        .grid-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 950px) {
+            .grid-split {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Tables */
+        .table-container {
+            background: var(--surface);
+            border: 1px solid var(--surface-border);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .scrollable-table {
+            max-height: 480px;
+            overflow-y: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.90rem;
+            text-align: left;
+        }
+
+        thead {
+            background-color: #192238;
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
+
+        th {
+            padding: 12px 16px;
+            font-weight: 700;
+            font-size: 0.80rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--surface-border);
+        }
+
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #1a253c;
+            color: var(--text-main);
+        }
+
+        tbody tr:hover {
+            background-color: var(--surface-hover);
+        }
+
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+        .font-bold { font-weight: 700; }
+        .font-semibold { font-weight: 600; }
+        .font-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+        .text-sm { font-size: 0.80rem; }
+        .text-muted { color: var(--text-muted); }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 3px 9px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .badge-high { background-color: rgba(52, 211, 153, 0.15); color: var(--accent-emerald); border: 1px solid rgba(52, 211, 153, 0.3); }
+        .badge-medium { background-color: rgba(251, 191, 36, 0.15); color: var(--accent-amber); border: 1px solid rgba(251, 191, 36, 0.3); }
+        .badge-low { background-color: rgba(248, 113, 113, 0.15); color: var(--accent-rose); border: 1px solid rgba(248, 113, 113, 0.3); }
+
+        .tag-pill {
+            background-color: #24304c;
+            color: var(--accent-cyan);
+            padding: 2px 7px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+        }
+
+        /* Visual Progress / Bars */
+        .progress-track {
+            width: 100%;
+            height: 10px;
+            background-color: #24304c;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 6px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 5px;
+        }
+
+        .fill-emerald { background-color: var(--accent-emerald); }
+        .fill-amber { background-color: var(--accent-amber); }
+        .fill-rose { background-color: var(--accent-rose); }
+        .fill-blue { background-color: var(--accent-cyan); }
+
+        .row-bar-item {
+            margin-bottom: 16px;
+        }
+
+        .row-bar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Search Controls */
+        .toolbar {
+            display: flex;
+            gap: 12px;
+            padding: 16px;
+            background: #192238;
+            border-bottom: 1px solid var(--surface-border);
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .toolbar input, .toolbar select {
+            background: #0f172a;
+            border: 1px solid #334155;
+            color: #fff;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 0.88rem;
+            outline: none;
+        }
+
+        .toolbar input:focus, .toolbar select:focus {
+            border-color: var(--accent-cyan);
+        }
+
+        .toolbar input {
+            flex: 1;
+            min-width: 220px;
+        }
+
+        .disclaimer-box {
+            background-color: rgba(30, 41, 59, 0.7);
+            border-left: 4px solid var(--accent-amber);
+            padding: 12px 16px;
+            font-size: 0.85rem;
+            color: #cbd5e1;
+            margin-top: 12px;
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+        }
+
+        /* Architecture Flow */
+        .flow-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 24px;
+            background: var(--surface);
+            border: 1px solid var(--surface-border);
+            border-radius: var(--radius-md);
+            overflow-x: auto;
+        }
+
+        .flow-step {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 14px 18px;
+            text-align: center;
+            min-width: 140px;
+            flex-shrink: 0;
+        }
+
+        .flow-step-num {
+            font-size: 0.75rem;
+            color: var(--accent-cyan);
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .flow-step-title {
+            font-size: 0.92rem;
+            font-weight: 700;
+            margin-top: 4px;
+            color: #fff;
+        }
+
+        .flow-arrow {
+            color: var(--accent-cyan);
+            font-size: 1.4rem;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 48px;
+            padding: 20px;
+            border-top: 1px solid var(--surface-border);
+        }
+
+        /* First-use capture experience. The long historic report stays available below on demand. */
+        .eyebrow { color: var(--accent-amber); font-size: .72rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; margin-bottom: 8px; }
+        .hero-copy { max-width: 630px; color: var(--text-muted); margin-top: 12px; }
+        .live-console { background: linear-gradient(135deg, rgba(51, 37, 91, .74), rgba(17, 29, 51, .68)); border: 1px solid rgba(205, 186, 255, .30); border-radius: 22px; padding: 28px; margin-bottom: 24px; box-shadow: 0 22px 55px rgba(3, 1, 14, .30), inset 0 1px 0 rgba(255, 255, 255, .08); backdrop-filter: blur(18px) saturate(135%); }
+        .capture-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; margin-bottom: 24px; }
+        .capture-heading h2 { font-size: 1.45rem; letter-spacing: -.025em; color: #fff; }
+        .capture-heading p { color: var(--text-muted); margin-top: 4px; max-width: 620px; }
+        .api-status { font-size: .78rem; color: var(--text-muted); padding: 7px 10px; border: 1px solid var(--surface-border); border-radius: 999px; white-space: nowrap; }
+        .capture-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+        .capture-choice { min-height: 154px; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; text-align: left; padding: 22px; color: var(--text-main); background: rgba(12, 10, 29, .33); border: 1px solid rgba(201, 184, 249, .19); border-radius: 16px; font: inherit; cursor: pointer; transition: transform .18s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease; }
+        .capture-choice:hover, .capture-choice:focus-visible { transform: translateY(-3px); border-color: rgba(222, 209, 255, .68); background: rgba(67, 46, 112, .50); box-shadow: 0 14px 28px rgba(4, 1, 18, .24); outline: none; }
+        .capture-choice.primary { background: linear-gradient(125deg, rgba(176, 130, 255, .29), rgba(84, 59, 158, .34)); }
+        .choice-icon { width: 38px; height: 38px; display: grid; place-items: center; border-radius: 12px; color: #20153f; background: linear-gradient(145deg, #d2b9ff, #91a8ff); font-size: 1.15rem; box-shadow: 0 8px 16px rgba(7, 2, 24, .28); }
+        .choice-title { font-size: 1rem; font-weight: 780; margin-top: 15px; color: #fff; }
+        .choice-help { font-size: .83rem; color: var(--text-muted); margin-top: 3px; }
+        .file-name { font-size: .77rem; color: var(--accent-emerald); margin-top: 8px; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .file-input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+        .guided-steps { display: flex; gap: 10px; margin: 22px 0 0; flex-wrap: wrap; }
+        .guided-step { color: var(--text-muted); font-size: .81rem; padding: 7px 10px; border: 1px solid rgba(195, 166, 255, .13); background: rgba(6, 5, 17, .16); border-radius: 999px; }
+        .guided-step b { color: var(--accent-cyan); margin-right: 4px; }
+        .camera-panel { margin-top: 16px; padding: 16px; border: 1px solid rgba(195, 166, 255, .18); border-radius: 16px; background: rgba(8, 7, 20, .38); }
+        .camera-panel video { display: block; width: 100%; max-height: 320px; object-fit: cover; background: #070611; border-radius: 11px; }
+        .camera-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 12px; }
+        .capture-submit { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 22px; padding-top: 20px; border-top: 1px solid rgba(195, 166, 255, .14); }
+        .capture-submit small { color: var(--text-muted); max-width: 570px; }
+        .live-button { background: linear-gradient(135deg, #d6bdff, #a8b8ff); color: #1a1030; font-weight: 800; border: 0; border-radius: 10px; padding: 12px 18px; cursor: pointer; font: inherit; box-shadow: 0 10px 22px rgba(43, 23, 89, .38); transition: transform .15s ease, box-shadow .15s ease; }
+        .live-button:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 14px 26px rgba(43, 23, 89, .50); }
+        .live-button:disabled { cursor: not-allowed; opacity: .52; }
+        .live-button.ghost { background: transparent; box-shadow: none; color: var(--accent-cyan); border: 1px solid rgba(195, 166, 255, .36); }
+        .audit-context { margin-top: 18px; color: var(--text-muted); font-size: .84rem; }
+        .audit-context summary { cursor: pointer; color: var(--accent-cyan); width: fit-content; }
+        .context-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
+        .live-field label { display: block; color: var(--text-muted); font-size: .75rem; margin-bottom: 5px; font-weight: 700; }
+        .live-field input { width: 100%; background: rgba(6, 5, 17, .45); border: 1px solid var(--surface-border); color: white; border-radius: 8px; padding: 9px 10px; }
+        .audit-result { margin-top: 16px; color: var(--text-muted); font-size: .9rem; min-height: 22px; }
+        .audit-visual { margin-top: 20px; padding: 14px; border: 1px solid rgba(195, 166, 255, .22); border-radius: 16px; background: rgba(7, 6, 18, .38); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .04); }
+        .audit-visual-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 3px 4px 12px; }
+        .audit-visual-title { font-weight: 750; color: #fff; }
+        .audit-visual-meta { color: var(--text-muted); font-size: .8rem; }
+        .annotated-shelf-image { width: 100%; max-height: 660px; object-fit: contain; display: block; background: #080711; border-radius: 11px; }
+        .detection-legend { display: flex; flex-wrap: wrap; gap: 12px; padding: 12px 4px 2px; color: var(--text-muted); font-size: .76rem; }
+        .legend-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; }
+        .legend-high { background: var(--accent-emerald); }
+        .legend-medium { background: var(--accent-amber); }
+        .legend-low { background: var(--accent-rose); }
+        .restock-toast { display: none; margin: 0 0 22px; border: 1px solid rgba(255, 145, 184, .60); background: rgba(116, 39, 77, .34); color: #ffd5e3; border-radius: 12px; padding: 14px 16px; box-shadow: 0 10px 24px rgba(29, 4, 17, .22); }
+        .analytics-drawer { margin-top: 22px; border: 1px solid rgba(195, 166, 255, .18); border-radius: 14px; background: rgba(19, 14, 36, .38); overflow: hidden; }
+        .analytics-drawer > summary { cursor: pointer; padding: 15px 18px; color: var(--text-muted); font-size: .9rem; list-style: none; }
+        .analytics-drawer > summary::-webkit-details-marker { display: none; }
+        .analytics-drawer > summary::after { content: '⌄'; float: right; color: var(--accent-cyan); font-size: 1.1rem; }
+        .analytics-drawer[open] > summary { border-bottom: 1px solid rgba(195, 166, 255, .14); color: #fff; }
+        .analytics-content { padding: 0 22px 24px; }
+        .operations-drawer { margin-top: 18px; border: 1px solid rgba(135, 235, 215, .22); border-radius: 16px; background: linear-gradient(135deg, rgba(18, 39, 52, .55), rgba(27, 17, 48, .58)); overflow: hidden; }
+        .operations-drawer > summary { padding: 16px 18px; cursor: pointer; list-style: none; color: #fff; font-weight: 750; }
+        .operations-drawer > summary::-webkit-details-marker { display: none; }
+        .operations-drawer > summary::after { content: '⌄'; float: right; color: var(--accent-cyan); font-size: 1.1rem; }
+        .operations-content { padding: 0 18px 20px; }
+        .operations-intro { color: var(--text-muted); margin: 0 0 16px; font-size: .87rem; }
+        .operations-grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(300px, .85fr); gap: 14px; }
+        .operation-card { border: 1px solid rgba(195, 166, 255, .18); border-radius: 13px; padding: 15px; background: rgba(5, 5, 16, .30); }
+        .operation-card h3 { margin: 0 0 5px; color: #fff; font-size: 1rem; }
+        .operation-card p { margin: 0 0 13px; color: var(--text-muted); font-size: .8rem; line-height: 1.45; }
+        .management-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 9px 0; }
+        .management-row.four { grid-template-columns: 1.15fr 1.65fr .8fr .8fr; }
+        .management-row input, .management-row select { width: 100%; box-sizing: border-box; border-radius: 8px; border: 1px solid rgba(195, 166, 255, .23); background: rgba(6, 5, 17, .55); color: #fff; padding: 8px 9px; font: inherit; font-size: .79rem; }
+        .management-row label { color: var(--text-muted); display: block; font-size: .72rem; margin-bottom: 4px; }
+        .management-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+        .compact-button { appearance: none; border: 1px solid rgba(195, 166, 255, .34); border-radius: 8px; background: rgba(148, 109, 214, .24); color: #fff; padding: 8px 10px; cursor: pointer; font: inherit; font-size: .78rem; font-weight: 700; }
+        .compact-button:hover { background: rgba(148, 109, 214, .40); }
+        .compact-button.danger { border-color: rgba(255, 145, 184, .42); background: rgba(144, 38, 83, .28); }
+        .compact-button.success { border-color: rgba(135, 235, 215, .42); background: rgba(40, 131, 112, .25); }
+        .management-status { min-height: 18px; color: var(--text-muted); font-size: .76rem; margin: 10px 0 0; }
+        .slot-list, .alert-list, .review-list, .history-list { display: grid; gap: 7px; max-height: 310px; overflow-y: auto; padding-right: 2px; }
+        .slot-item, .alert-item, .review-item, .history-item { border: 1px solid rgba(255,255,255,.08); border-radius: 9px; padding: 9px; background: rgba(255,255,255,.025); font-size: .78rem; }
+        .slot-item { display: flex; justify-content: space-between; gap: 8px; align-items: center; }
+        .slot-item strong, .review-item strong, .history-item strong { color: #fff; }
+        .slot-item span, .alert-item small, .review-item small, .history-item small { color: var(--text-muted); }
+        .alert-item.critical { border-color: rgba(255, 145, 184, .42); }
+        .review-item { display: grid; grid-template-columns: 78px 1fr; gap: 9px; }
+        .review-crop { width: 78px; height: 78px; object-fit: cover; border-radius: 7px; background: #0b0a16; }
+        .review-controls { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 6px; margin-top: 7px; }
+        .review-controls select, .review-controls input { min-width: 0; border-radius: 7px; border: 1px solid rgba(195,166,255,.23); background: rgba(6,5,17,.55); color: #fff; padding: 6px; font: inherit; font-size: .72rem; }
+        .history-item { display: flex; align-items: center; justify-content: space-between; gap: 9px; }
+        .empty-state { color: var(--text-muted); font-size: .78rem; padding: 8px 0; }
+        @media (max-width: 800px) { body { padding: 14px; } header, .live-console { padding: 21px; } .capture-heading { display: block; } .api-status { display: inline-block; margin-top: 12px; } .capture-grid, .context-grid, .operations-grid, .management-row, .management-row.four { grid-template-columns: 1fr; } .capture-submit { align-items: flex-start; flex-direction: column; } .analytics-content { padding: 0 12px 16px; } .review-controls { grid-template-columns: 1fr 1fr; } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <header>
+        <div class="eyebrow">Shelf audit workspace</div>
+        <div class="title">Retail Shelf Intelligence</div>
+        <div class="subtitle">Detect · review · restock</div>
+        <p class="hero-copy">Start with one clear shelf image. The system counts product facings, reads available label text, compares the shelf against its planogram and flags only the items that need attention.</p>
+    </header>
+
+    <!-- LIVE BACKEND CONTROLS -->
+    <div id="restockToast" class="restock-toast" role="alert"></div>
+    <section class="live-console" aria-labelledby="liveConsoleTitle">
+        <div class="capture-heading">
+            <div>
+                <h2 id="liveConsoleTitle">Audit a shelf</h2>
+                <p>Choose a saved image or use this device camera. We will guide the rest of the audit.</p>
+            </div>
+            <span id="apiStatus" class="api-status">Checking API…</span>
+        </div>
+        <form id="auditForm">
+            <div class="capture-grid">
+                <input id="shelfImage" class="file-input" name="image" type="file" accept="image/jpeg,image/png,image/webp">
+                <label for="shelfImage" class="capture-choice primary">
+                    <span class="choice-icon">↥</span>
+                    <span class="choice-title">Upload shelf photo</span>
+                    <span class="choice-help">Choose a JPG, PNG or WEBP image from this device.</span>
+                    <span id="selectedFileName" class="file-name">No photo selected</span>
+                </label>
+                <button id="openCamera" class="capture-choice" type="button">
+                    <span class="choice-icon">⌾</span>
+                    <span class="choice-title">Capture live photo</span>
+                    <span class="choice-help">Use your camera to take a clear, front-facing shelf photo.</span>
+                </button>
+            </div>
+            <div class="guided-steps" aria-label="Audit steps">
+                <span class="guided-step"><b>1</b> Choose a photo</span>
+                <span class="guided-step"><b>2</b> AI analyses the shelf</span>
+                <span class="guided-step"><b>3</b> Review any alerts</span>
+            </div>
+            <div id="cameraPanel" class="camera-panel" hidden>
+                <video id="cameraPreview" autoplay playsinline muted></video>
+                <div class="camera-actions">
+                    <button id="closeCamera" class="live-button ghost" type="button">Close</button>
+                    <button id="captureCamera" class="live-button" type="button">Use this photo</button>
+                </div>
+            </div>
+            <details class="audit-context">
+                <summary>Change store or auditor details</summary>
+                <div class="context-grid">
+                    <div class="live-field"><label for="storeId">Store ID</label><input id="storeId" value="demo-store" required></div>
+                    <div class="live-field"><label for="shelfId">Shelf ID</label><input id="shelfId" value="aisle-01" required></div>
+                    <div class="live-field"><label for="operator">Auditor name</label><input id="operator" value="Student Auditor" required></div>
+                </div>
+            </details>
+            <div class="capture-submit">
+                <small>For a first-time setup, add your product catalogue and planogram in <a href="/docs" target="_blank" style="color:var(--accent-cyan)">API Docs</a>. Low-confidence results are held for human review.</small>
+                <button id="runAudit" class="live-button" type="submit" disabled>Analyse shelf</button>
+            </div>
+        </form>
+        <div id="auditResult" class="audit-result">Choose a shelf photo to begin.</div>
+        <section id="auditVisual" class="audit-visual" hidden aria-live="polite">
+            <div class="audit-visual-header">
+                <span class="audit-visual-title">Detected shelf facings</span>
+                <span id="auditVisualMeta" class="audit-visual-meta"></span>
+            </div>
+            <img id="annotatedShelfImage" class="annotated-shelf-image" alt="Shelf image with AI-detected product boxes">
+            <div class="detection-legend">
+                <span><i class="legend-dot legend-high"></i>High confidence</span>
+                <span><i class="legend-dot legend-medium"></i>Medium confidence</span>
+                <span><i class="legend-dot legend-low"></i>Low confidence / review</span>
+            </div>
+        </section>
+    </section>
+
+    <details id="operationsDrawer" class="operations-drawer">
+        <summary>Planogram, alerts and human review workspace</summary>
+        <div class="operations-content">
+            <p class="operations-intro">Set the shelf reference once, then use this same drawer to resolve uncertain AI results and close restock reminders. Changes are recorded in MongoDB as audit evidence.</p>
+            <div class="operations-grid">
+                <section class="operation-card" aria-labelledby="planogramTitle">
+                    <h3 id="planogramTitle">Planogram designer</h3>
+                    <p>First add products to the local catalogue. Then define the expected and minimum number of facings for each shelf row.</p>
+                    <div class="management-row">
+                        <div><label for="productSku">SKU</label><input id="productSku" placeholder="COLA-500"></div>
+                        <div><label for="productName">Product name</label><input id="productName" placeholder="Cola 500 ml"></div>
+                        <div><label for="productAliases">OCR aliases</label><input id="productAliases" placeholder="cola, 500ml"></div>
+                    </div>
+                    <div class="management-actions"><button id="addProductButton" class="compact-button" type="button">Add catalogue product</button></div>
+                    <hr style="border:0;border-top:1px solid rgba(255,255,255,.09);margin:14px 0">
+                    <div class="management-row">
+                        <div><label for="planogramName">Planogram name</label><input id="planogramName" value="Demo aisle planogram"></div>
+                        <div><label for="planogramRow">Shelf row</label><input id="planogramRow" type="number" min="1" value="1"></div>
+                        <div><label for="planogramSku">Product SKU</label><select id="planogramSku"><option value="">Add a catalogue product first</option></select></div>
+                    </div>
+                    <div class="management-row four">
+                        <div><label for="planogramExpected">Expected facings</label><input id="planogramExpected" type="number" min="0" value="3"></div>
+                        <div><label for="planogramMinimum">Minimum before restock</label><input id="planogramMinimum" type="number" min="0" value="1"></div>
+                        <div><label for="planogramPosition">Position</label><select id="planogramPosition"><option value="">Any</option><option>left</option><option>centre</option><option>right</option></select></div>
+                        <div style="display:flex;align-items:end"><button id="addSlotButton" class="compact-button" type="button">Add slot</button></div>
+                    </div>
+                    <div id="planogramSlots" class="slot-list"><div class="empty-state">No planogram slots yet.</div></div>
+                    <div class="management-actions">
+                        <button id="loadPlanogramButton" class="compact-button" type="button">Load current shelf</button>
+                        <button id="savePlanogramButton" class="compact-button success" type="button">Save planogram</button>
+                    </div>
+                    <div id="planogramStatus" class="management-status"></div>
+                </section>
+                <div style="display:grid;gap:14px">
+                    <section class="operation-card" aria-labelledby="alertTitle">
+                        <h3 id="alertTitle">Restock reminders</h3>
+                        <p>Only confirmed below-minimum facings create alerts. Resolving an alert is an auditable action.</p>
+                        <div id="alertList" class="alert-list"><div class="empty-state">Loading alerts…</div></div>
+                    </section>
+                    <section class="operation-card" aria-labelledby="historyTitle">
+                        <h3 id="historyTitle">Recent audit evidence</h3>
+                        <p>Open a saved audit to view its boxed image, product crops and evidence report.</p>
+                        <div id="historyList" class="history-list"><div class="empty-state">No audits loaded yet.</div></div>
+                    </section>
+                </div>
+            </div>
+            <section class="operation-card" style="margin-top:14px" aria-labelledby="reviewTitle">
+                <h3 id="reviewTitle">Human review queue</h3>
+                <p>Use this only when the AI cannot safely map packaging text to your catalogue. Correcting or removing a detection recalculates planogram results and leaves an event trail.</p>
+                <div id="reviewList" class="review-list"><div class="empty-state">Run or open an audit to review uncertain detections.</div></div>
+            </section>
+        </div>
+    </details>
+
+    <details class="analytics-drawer">
+        <summary>Open previous detailed analytics report</summary>
+        <div class="analytics-content">
+    <!-- SECTION 1: KEY METRICS -->
+    <div class="section-title">Section 1 — Key Executive Metrics</div>
+    <div class="grid-cards">
+        <div class="card">
+            <div class="card-label">Total Products Detected</div>
+            <div class="card-value text-cyan">135</div>
+            <div class="card-subtext">YOLO detected objects</div>
+        </div>
+        <div class="card">
+            <div class="card-label">Products with OCR</div>
+            <div class="card-value text-emerald">14</div>
+            <div class="card-subtext">121 without readable text</div>
+        </div>
+        <div class="card">
+            <div class="card-label">OCR Recognition Rate</div>
+            <div class="card-value text-indigo">10.4%</div>
+            <div class="card-subtext">Crops with readable text</div>
+        </div>
+        <div class="card">
+            <div class="card-label">Avg Detection Confidence</div>
+            <div class="card-value">0.61</div>
+            <div class="card-subtext">Range: 0.25 – 0.88</div>
+        </div>
+        <div class="card">
+            <div class="card-label">Avg OCR Confidence</div>
+            <div class="card-value text-emerald">0.79</div>
+            <div class="card-subtext">16 total text snippets</div>
+        </div>
+        <div class="card">
+            <div class="card-label">Estimated Shelf Rows</div>
+            <div class="card-value text-amber">8</div>
+            <div class="card-subtext">Vertical cluster estimation</div>
+        </div>
+    </div>
+
+    <!-- SECTION 2 & SECTION 3: CONFIDENCE & OCR ANALYSIS -->
+    <div class="grid-split">
+        <!-- Detection Confidence Distribution -->
+        <div class="card">
+            <h3 style="margin-bottom: 16px; font-size: 1.1rem; color: #fff;">Section 2 — Detection Confidence Breakdown</h3>
+            <p class="text-muted text-sm" style="margin-bottom: 20px;">
+                Detections categorized by model confidence. Low confidence denotes score &lt; 0.50 and does not imply incorrectness.
+            </p>
+
+            <div style="margin-bottom: 18px;">
+                <div style="display: flex; justify-content: space-between; font-weight: 600; font-size: 0.9rem;">
+                    <span class="text-emerald">High Confidence (≥ 0.75)</span>
+                    <span>30 (22.2%)</span>
+                </div>
+                <div class="progress-track">
+                    <div class="progress-fill fill-emerald" style="width: 22.2%;"></div>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 18px;">
+                <div style="display: flex; justify-content: space-between; font-weight: 600; font-size: 0.9rem;">
+                    <span class="text-amber">Medium Confidence (0.50 – 0.74)</span>
+                    <span>68 (50.4%)</span>
+                </div>
+                <div class="progress-track">
+                    <div class="progress-fill fill-amber" style="width: 50.4%;"></div>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 18px;">
+                <div style="display: flex; justify-content: space-between; font-weight: 600; font-size: 0.9rem;">
+                    <span class="text-rose">Low Confidence (&lt; 0.50)</span>
+                    <span>37 (27.4%)</span>
+                </div>
+                <div class="progress-track">
+                    <div class="progress-fill fill-rose" style="width: 27.4%;"></div>
+                </div>
+            </div>
+
+            <div class="disclaimer-box">
+                <strong>Threshold Note:</strong> 37 detections fell below the 0.50 threshold. These are retained for full transparency.
+            </div>
+        </div>
+
+        <!-- OCR Analysis & Recognized Text -->
+        <div class="card">
+            <h3 style="margin-bottom: 16px; font-size: 1.1rem; color: #fff;">Section 3 — Recognized Text Frequency</h3>
+            <p class="text-muted text-sm" style="margin-bottom: 16px;">
+                Unique strings detected from packaging crops. Note: Represents recognized text, not confirmed brand entities.
+            </p>
+            <div class="table-container" style="max-height: 240px; overflow-y: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Recognized Text</th>
+                            <th class="text-right">Occurrences</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+        <tr>
+            <td class="font-mono text-cyan">DGZ</td>
+            <td class="text-right font-bold">4</td>
+        </tr>
+        
+        <tr>
+            <td class="font-mono text-cyan">BELLAVITA</td>
+            <td class="text-right font-bold">2</td>
+        </tr>
+        
+        <tr>
+            <td class="font-mono text-cyan">OCTAN</td>
+            <td class="text-right font-bold">1</td>
+        </tr>
+        
+        <tr>
+            <td class="font-mono text-cyan">OCEAN</td>
+            <td class="text-right font-bold">1</td>
+        </tr>
+        
+        <tr>
+            <td class="font-mono text-cyan">BLUE</td>
+            <td class="text-right font-bold">1</td>
+        </tr>
+        
+        <tr>
+            <td class="font-mono text-cyan">WOODS</td>
+            <td class="text-right font-bold">1</td>
+        </tr>
+        
+        <tr>
+            <td class="font-mono text-cyan">D</td>
+            <td class="text-right font-bold">1</td>
+        </tr>
+        
+        <tr>
+            <td class="font-mono text-cyan">MFOGG</td>
+            <td class="text-right font-bold">1</td>
+        </tr>
+        
+        <tr>
+            <td class="font-mono text-cyan">CEO</td>
+            <td class="text-right font-bold">1</td>
+        </tr>
+        
+        <tr>
+            <td class="font-mono text-cyan">QODS</td>
+            <td class="text-right font-bold">1</td>
+        </tr>
+        
+        <tr>
+            <td class="font-mono text-cyan">DG</td>
+            <td class="text-right font-bold">1</td>
+        </tr>
+        
+        <tr>
+            <td class="font-mono text-cyan">X60 PCS</td>
+            <td class="text-right font-bold">1</td>
+        </tr>
+        
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-subtext" style="margin-top: 12px;">
+                Top detected texts: DGZ (4), BELLAVITA (2).
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 4: ESTIMATED SHELF ROWS -->
+    <div class="section-title">Section 4 — Estimated Shelf Rows</div>
+    <div class="card" style="margin-bottom: 24px;">
+        <p class="text-muted text-sm" style="margin-bottom: 20px;">
+            Horizontal distribution calculated via vertical coordinate clustering (100px tolerance).
+        </p>
+        
+        <div class="row-bar-item">
+            <div class="row-bar-header">
+                <span class="font-bold">Row 1</span>
+                <span class="text-muted text-sm">(Y ≈ 20px) • <strong>4 products</strong> • <span class="tag-pill">X60 PCS</span></span>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill fill-blue" style="width: 13.3%;"></div>
+            </div>
+        </div>
+        
+        <div class="row-bar-item">
+            <div class="row-bar-header">
+                <span class="font-bold">Row 2</span>
+                <span class="text-muted text-sm">(Y ≈ 201px) • <strong>5 products</strong> • <span class="tag-pill">WOODS, QODS, MFOGG, BELLAVITA</span></span>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill fill-blue" style="width: 16.7%;"></div>
+            </div>
+        </div>
+        
+        <div class="row-bar-item">
+            <div class="row-bar-header">
+                <span class="font-bold">Row 3</span>
+                <span class="text-muted text-sm">(Y ≈ 486px) • <strong>10 products</strong> • <span class="tag-pill">BELLAVITA, DGZ, CEO, DG</span></span>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill fill-blue" style="width: 33.3%;"></div>
+            </div>
+        </div>
+        
+        <div class="row-bar-item">
+            <div class="row-bar-header">
+                <span class="font-bold">Row 4</span>
+                <span class="text-muted text-sm">(Y ≈ 724px) • <strong>15 products</strong> • <span class="tag-pill">DGZ, OCTAN, OCEAN, BLUE, D</span></span>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill fill-blue" style="width: 50.0%;"></div>
+            </div>
+        </div>
+        
+        <div class="row-bar-item">
+            <div class="row-bar-header">
+                <span class="font-bold">Row 5</span>
+                <span class="text-muted text-sm">(Y ≈ 959px) • <strong>30 products</strong> • <span class="text-muted text-sm">No text</span></span>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill fill-blue" style="width: 100.0%;"></div>
+            </div>
+        </div>
+        
+        <div class="row-bar-item">
+            <div class="row-bar-header">
+                <span class="font-bold">Row 6</span>
+                <span class="text-muted text-sm">(Y ≈ 1167px) • <strong>26 products</strong> • <span class="text-muted text-sm">No text</span></span>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill fill-blue" style="width: 86.7%;"></div>
+            </div>
+        </div>
+        
+        <div class="row-bar-item">
+            <div class="row-bar-header">
+                <span class="font-bold">Row 7</span>
+                <span class="text-muted text-sm">(Y ≈ 1385px) • <strong>29 products</strong> • <span class="text-muted text-sm">No text</span></span>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill fill-blue" style="width: 96.7%;"></div>
+            </div>
+        </div>
+        
+        <div class="row-bar-item">
+            <div class="row-bar-header">
+                <span class="font-bold">Row 8</span>
+                <span class="text-muted text-sm">(Y ≈ 1571px) • <strong>16 products</strong> • <span class="text-muted text-sm">No text</span></span>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill fill-blue" style="width: 53.3%;"></div>
+            </div>
+        </div>
+        
+        <div class="disclaimer-box">
+            <strong>Important Note:</strong> Rows are estimated from product bounding-box positions and should not be interpreted as exact physical shelf segmentation.
+        </div>
+    </div>
+
+    <!-- SECTION 5: SPATIAL ANALYSIS -->
+    <div class="section-title">Section 5 — Spatial &amp; Density Analysis</div>
+    <div class="grid-cards" style="margin-bottom: 24px;">
+        <div class="card">
+            <div class="card-label">Avg Bounding Box Area</div>
+            <div class="card-value">6,336 <span style="font-size: 1rem; font-weight: normal; color: var(--text-muted);">px²</span></div>
+            <div class="card-subtext">Mean product crop dimension</div>
+        </div>
+        <div class="card">
+            <div class="card-label">Smallest Crop Area</div>
+            <div class="card-value text-amber">1,500 <span style="font-size: 1rem; font-weight: normal; color: var(--text-muted);">px²</span></div>
+            <div class="card-subtext">Minimum detected box</div>
+        </div>
+        <div class="card">
+            <div class="card-label">Largest Crop Area</div>
+            <div class="card-value text-indigo">36,562 <span style="font-size: 1rem; font-weight: normal; color: var(--text-muted);">px²</span></div>
+            <div class="card-subtext">Maximum detected box</div>
+        </div>
+        <div class="card">
+            <div class="card-label">Potential Overlapping Pairs</div>
+            <div class="card-value text-emerald">0</div>
+            <div class="card-subtext">IoU ≥ 0.50 threshold</div>
+        </div>
+    </div>
+
+    <!-- SECTION 6: CONFIDENCE FLAGS -->
+    <div class="section-title">Section 6 — Low-Confidence Detection Flags</div>
+    <div class="table-container" style="margin-bottom: 24px;">
+        <div style="padding: 14px 16px; background: #192238; border-bottom: 1px solid var(--surface-border);">
+            <span class="font-bold">Flagged Detections (&lt; 0.50 Confidence)</span>
+            <span class="text-muted text-sm">— Showing up to 20 lowest records for verification</span>
+        </div>
+        <div class="scrollable-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product ID</th>
+                        <th>Confidence</th>
+                        <th>Bounding Box [x1, y1, x2, y2]</th>
+                        <th>OCR Text</th>
+                        <th class="text-center">Estimated Row</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+        <tr>
+            <td class="font-bold">P99</td>
+            <td><span class="badge badge-low">0.49</span></td>
+            <td class="font-mono text-sm">[129, 171, 282, 273]</td>
+            <td class="text-sm">Not detected</td>
+            <td class="text-center">Row 2</td>
+        </tr>
+        
+        <tr>
+            <td class="font-bold">P100</td>
+            <td><span class="badge badge-low">0.49</span></td>
+            <td class="font-mono text-sm">[844, 1547, 884, 1600]</td>
+            <td class="text-sm">Not detected</td>
+            <td class="text-center">Row 8</td>
+        </tr>
+        
+        <tr>
+            <td class="font-bold">P101</td>
+            <td><span class="badge badge-low">0.48</span></td>
+            <td class="font-mono text-sm">[397, 1093, 425, 1223]</td>
+            <td class="text-sm">Not detected</td>
+            <td class="text-center">Row 6</td>
+        </tr>
+        
+        <tr>
+            <td class="font-bold">P102</td>
+            <td><span class="badge badge-low">0.48</span></td>
+            <td class="font-mono text-sm">[1148, 1292, 1179, 1433]</td>
+            <td class="text-sm">Not detected</td>
+            <td class="text-center">Row 7</td>
+        </tr>
+        
+        <tr>
+            <td class="font-bold">P103</td>
+            <td><span class="badge badge-low">0.48</span></td>
+            <td class="font-mono text-sm">[0, 890, 18, 1029]</td>
+            <td class="text-sm">Not detected</td>
+            <td class="text-center">Row 5</td>
+        </tr>
+        
+        <tr>
+            <td class="font-bold">P104</td>
+            <td><span class="badge badge-low">0.48</span></td>
+            <td class="font-mono text-sm">[1112, 1294, 1147, 1434]</td>
+            <td class="text-sm">Not detected</td>
+            <td class="text-center">Row 7</td>
+        </tr>
+        
+        <tr>
+            <td class="font-bold">P105</td>
+            <td><span class="badge badge-low">0.48</span></td>
+            <td class="font-mono text-sm">[431, 1323, 468, 1459]</td>
+            <td class="text-sm">Not detected</td>
+            <td class="text-center">Row 7</td>
+        </tr>
+        
+        <tr>
+            <td class="font-bold">P106</td>
+            <td><span class="badge badge-low">0.45</span></td>
+            <td class="font-mono text-sm">[450, 1535, 494, 1600]</td>
+            <td class="text-sm">Not detected</td>
+            <td class="text-center">Row 8</td>
+        </tr>
+        
+        <tr>
+            <td class="font-bold">P107</td>
+            <td><span class="badge badge-low">0.45</span></td>
+            <td class="font-mono text-sm">[1188, 864, 1200, 1013]</td>
+            <td class="text-sm">Not detected</td>
+            <td class="text-center">Row 5</td>
+        </tr>
+        
+        <tr>
+            <td class="font-bold">P108</td>
+            <td><span class="badge badge-low">0.45</span></td>
+            <td class="font-mono text-sm">[501, 1537, 576, 1600]</td>
+            <td class="text-sm">Not detected</td>
+            <td class="text-center">Row 8</td>
+        </tr>
+        
+        <tr>
+            <td class="font-bold">P109</td>
+            <td><span class="badge badge-low">0.44</span></td>
+            <td class="font-mono text-sm">[140, 1540, 165, 1600]</td>
+            <td class="text-sm">Not detected</td>
+            <td class="text-center">Row 8</td>
+        </tr>
+        
+        <tr>
+            <td class="font-bold">P110</td>
+            <td><span class="badge badge-low">0.44</span></td>
+            <td class="font-mono text-sm">[471, 1309, 512, 1449]</td>
+            <td class="text-sm">Not detected</td>
+            <td class="text-center">Row 7</td>
+        </tr>
+        
+        <tr>
+            <td class="font-bold">P111</td>
+            <td><span class="badge badge-low">0.42</span></td>
+            <td class="font-mono text-sm">[815, 1553, 847, 1600]</td>
+            <td class="text-sm">Not detected</td>
+            <td class="text-center">Row 8</td>
+        </tr>
+        
+        <tr>
+            <td class="font-bold">P112</td>
+            <td><span class="badge badge-low">0.42</span></td>
+            <td class="font-mono text-sm">[166, 1540, 200, 1600]</td>
+            <td class="text-sm">Not detected</td>
+            <td class="text-center">Row 8</td>
+        </tr>
+        
+        <tr>
+            <td class="font-bold">P113</td>
+            <td><span class="badge badge-low">0.41</span></td>
+            <td class="font-mono text-sm">[1122, 1293, 1170, 1435]</td>
+            <td class="text-sm">Not detected</td>
+            <td class="text-center">Row 7</td>
+        </tr>
+        
+        <tr>
+            <td class="font-bold">P114</td>
+            <td><span class="badge badge-low">0.40</span></td>
+            <td class="font-mono text-sm">[676, 1124, 698, 1220]</td>
+            <td class="text-sm">Not detected</td>
+            <td class="text-center">Row 6</td>
+        </tr>
+        
+        <tr>
+            <td class="font-bold">P115</td>
+            <td><span class="badge badge-low">0.40</span></td>
+            <td class="font-mono text-sm">[292, 0, 406, 26]</td>
+            <td class="text-sm">X60 Pcs</td>
+            <td class="text-center">Row 1</td>
+        </tr>
+        
+        <tr>
+            <td class="font-bold">P116</td>
+            <td><span class="badge badge-low">0.40</span></td>
+            <td class="font-mono text-sm">[416, 399, 602, 555]</td>
+            <td class="text-sm">DGZ</td>
+            <td class="text-center">Row 3</td>
+        </tr>
+        
+        <tr>
+            <td class="font-bold">P117</td>
+            <td><span class="badge badge-low">0.39</span></td>
+            <td class="font-mono text-sm">[238, 1541, 277, 1600]</td>
+            <td class="text-sm">Not detected</td>
+            <td class="text-center">Row 8</td>
+        </tr>
+        
+        <tr>
+            <td class="font-bold">P118</td>
+            <td><span class="badge badge-low">0.38</span></td>
+            <td class="font-mono text-sm">[411, 0, 613, 28]</td>
+            <td class="text-sm">Not detected</td>
+            <td class="text-center">Row 1</td>
+        </tr>
+        
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="disclaimer-box" style="margin-top: -12px; margin-bottom: 24px;">
+        <strong>Confidence Clarification:</strong> Low-confidence indicates model confidence below the configured threshold; it does not necessarily indicate an incorrect detection.
+    </div>
+
+    <!-- SECTION 7: INTERACTIVE PRODUCT DETAILS TABLE -->
+    <div class="section-title">Section 7 — Complete Product Catalog &amp; Analytics</div>
+    <div class="table-container" style="margin-bottom: 28px;">
+        <div class="toolbar">
+            <input type="text" id="searchInput" placeholder="Search by ID, text, row, coordinates..." onkeyup="filterTable()">
+            <select id="confidenceFilter" onchange="filterTable()">
+                <option value="all">All Confidence Categories</option>
+                <option value="high">High (≥ 0.75)</option>
+                <option value="medium">Medium (0.50 – 0.74)</option>
+                <option value="low">Low (&lt; 0.50)</option>
+            </select>
+            <span class="text-muted text-sm">Showing <strong id="visibleCount" style="color:#fff;">135</strong> of 135 products</span>
+        </div>
+        <div class="scrollable-table" style="max-height: 520px;">
+            <table id="productsTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Class</th>
+                        <th>Det Conf</th>
+                        <th>Category</th>
+                        <th>OCR Text</th>
+                        <th>OCR Conf</th>
+                        <th>Center X</th>
+                        <th>Center Y</th>
+                        <th>Width</th>
+                        <th>Height</th>
+                        <th>Area (px²)</th>
+                        <th class="text-center">Row</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+        <tr data-category="high">
+            <td class="font-bold">P1</td>
+            <td>object</td>
+            <td>0.88</td>
+            <td><span class="badge badge-high">High</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>915.5</td>
+            <td>1373.0</td>
+            <td>47</td>
+            <td>142</td>
+            <td>6674</td>
+            <td class="text-center font-semibold">Row 7</td>
+        </tr>
+        
+        <tr data-category="high">
+            <td class="font-bold">P2</td>
+            <td>object</td>
+            <td>0.87</td>
+            <td><span class="badge badge-high">High</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>186.0</td>
+            <td>1161.5</td>
+            <td>44</td>
+            <td>143</td>
+            <td>6292</td>
+            <td class="text-center font-semibold">Row 6</td>
+        </tr>
+        
+        <tr data-category="high">
+            <td class="font-bold">P3</td>
+            <td>object</td>
+            <td>0.86</td>
+            <td><span class="badge badge-high">High</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>282.0</td>
+            <td>944.5</td>
+            <td>52</td>
+            <td>151</td>
+            <td>7852</td>
+            <td class="text-center font-semibold">Row 5</td>
+        </tr>
+        
+        <tr data-category="high">
+            <td class="font-bold">P4</td>
+            <td>object</td>
+            <td>0.85</td>
+            <td><span class="badge badge-high">High</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>142.5</td>
+            <td>1163.5</td>
+            <td>41</td>
+            <td>139</td>
+            <td>5699</td>
+            <td class="text-center font-semibold">Row 6</td>
+        </tr>
+        
+        <tr data-category="high">
+            <td class="font-bold">P5</td>
+            <td>object</td>
+            <td>0.84</td>
+            <td><span class="badge badge-high">High</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>867.0</td>
+            <td>1374.5</td>
+            <td>38</td>
+            <td>135</td>
+            <td>5130</td>
+            <td class="text-center font-semibold">Row 7</td>
+        </tr>
+        
+        <tr data-category="high">
+            <td class="font-bold">P6</td>
+            <td>object</td>
+            <td>0.84</td>
+            <td><span class="badge badge-high">High</span></td>
+            <td class="text-cyan font-semibold">DGZ</td>
+            <td>0.94</td>
+            <td>1131.5</td>
+            <td>739.0</td>
+            <td>89</td>
+            <td>114</td>
+            <td>10146</td>
+            <td class="text-center font-semibold">Row 4</td>
+        </tr>
+        
+        <tr data-category="high">
+            <td class="font-bold">P7</td>
+            <td>object</td>
+            <td>0.84</td>
+            <td><span class="badge badge-high">High</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>224.5</td>
+            <td>948.5</td>
+            <td>49</td>
+            <td>153</td>
+            <td>7497</td>
+            <td class="text-center font-semibold">Row 5</td>
+        </tr>
+        
+        <tr data-category="high">
+            <td class="font-bold">P8</td>
+            <td>object</td>
+            <td>0.83</td>
+            <td><span class="badge badge-high">High</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>275.5</td>
+            <td>730.0</td>
+            <td>109</td>
+            <td>122</td>
+            <td>13298</td>
+            <td class="text-center font-semibold">Row 4</td>
+        </tr>
+        
+        <tr data-category="high">
+            <td class="font-bold">P9</td>
+            <td>object</td>
+            <td>0.81</td>
+            <td><span class="badge badge-high">High</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>281.5</td>
+            <td>1158.0</td>
+            <td>49</td>
+            <td>140</td>
+            <td>6860</td>
+            <td class="text-center font-semibold">Row 6</td>
+        </tr>
+        
+        <tr data-category="high">
+            <td class="font-bold">P10</td>
+            <td>object</td>
+            <td>0.81</td>
+            <td><span class="badge badge-high">High</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>424.5</td>
+            <td>952.5</td>
+            <td>41</td>
+            <td>143</td>
+            <td>5863</td>
+            <td class="text-center font-semibold">Row 5</td>
+        </tr>
+        
+        <tr data-category="high">
+            <td class="font-bold">P11</td>
+            <td>object</td>
+            <td>0.81</td>
+            <td><span class="badge badge-high">High</span></td>
+            <td class="text-cyan font-semibold">OCTAN</td>
+            <td>0.63</td>
+            <td>574.5</td>
+            <td>729.0</td>
+            <td>97</td>
+            <td>124</td>
+            <td>12028</td>
+            <td class="text-center font-semibold">Row 4</td>
+        </tr>
+        
+        <tr data-category="high">
+            <td class="font-bold">P12</td>
+            <td>object</td>
+            <td>0.80</td>
+            <td><span class="badge badge-high">High</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>690.5</td>
+            <td>970.0</td>
+            <td>31</td>
+            <td>78</td>
+            <td>2418</td>
+            <td class="text-center font-semibold">Row 5</td>
+        </tr>
+        
+        <tr data-category="high">
+            <td class="font-bold">P13</td>
+            <td>object</td>
+            <td>0.80</td>
+            <td><span class="badge badge-high">High</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>381.5</td>
+            <td>952.0</td>
+            <td>37</td>
+            <td>142</td>
+            <td>5254</td>
+            <td class="text-center font-semibold">Row 5</td>
+        </tr>
+        
+        <tr data-category="high">
+            <td class="font-bold">P14</td>
+            <td>object</td>
+            <td>0.79</td>
+            <td><span class="badge badge-high">High</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>380.0</td>
+            <td>729.0</td>
+            <td>94</td>
+            <td>114</td>
+            <td>10716</td>
+            <td class="text-center font-semibold">Row 4</td>
+        </tr>
+        
+        <tr data-category="high">
+            <td class="font-bold">P15</td>
+            <td>object</td>
+            <td>0.78</td>
+            <td><span class="badge badge-high">High</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>97.0</td>
+            <td>1172.0</td>
+            <td>44</td>
+            <td>140</td>
+            <td>6160</td>
+            <td class="text-center font-semibold">Row 6</td>
+        </tr>
+        
+        <tr data-category="high">
+            <td class="font-bold">P16</td>
+            <td>object</td>
+            <td>0.78</td>
+            <td><span class="badge badge-high">High</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>797.0</td>
+            <td>973.0</td>
+            <td>40</td>
+            <td>86</td>
+            <td>3440</td>
+            <td class="text-center font-semibold">Row 5</td>
+        </tr>
+        
+        <tr data-category="high">
+            <td class="font-bold">P17</td>
+            <td>object</td>
+            <td>0.78</td>
+            <td><span class="badge badge-high">High</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>545.0</td>
+            <td>971.5</td>
+            <td>32</td>
+            <td>87</td>
+            <td>2784</td>
+            <td class="text-center font-semibold">Row 5</td>
+        </tr>
+        
+        <tr data-category="high">
+            <td class="font-bold">P18</td>
+            <td>object</td>
+            <td>0.77</td>
+            <td><span class="badge badge-high">High</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>914.5</td>
+            <td>971.0</td>
+            <td>33</td>
+            <td>82</td>
+            <td>2706</td>
+            <td class="text-center font-semibold">Row 5</td>
+        </tr>
+        
+        <tr data-category="high">
+            <td class="font-bold">P19</td>
+            <td>object</td>
+            <td>0.77</td>
+            <td><span class="badge badge-high">High</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>366.0</td>
+            <td>1396.0</td>
+            <td>36</td>
+            <td>150</td>
+            <td>5400</td>
+            <td class="text-center font-semibold">Row 7</td>
+        </tr>
+        
+        <tr data-category="high">
+            <td class="font-bold">P20</td>
+            <td>object</td>
+            <td>0.77</td>
+            <td><span class="badge badge-high">High</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>1039.5</td>
+            <td>727.0</td>
+            <td>87</td>
+            <td>132</td>
+            <td>11484</td>
+            <td class="text-center font-semibold">Row 4</td>
+        </tr>
+        
+        <tr data-category="high">
+            <td class="font-bold">P21</td>
+            <td>object</td>
+            <td>0.77</td>
+            <td><span class="badge badge-high">High</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>1129.5</td>
+            <td>939.5</td>
+            <td>43</td>
+            <td>147</td>
+            <td>6321</td>
+            <td class="text-center font-semibold">Row 5</td>
+        </tr>
+        
+        <tr data-category="high">
+            <td class="font-bold">P22</td>
+            <td>object</td>
+            <td>0.77</td>
+            <td><span class="badge badge-high">High</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>964.0</td>
+            <td>1372.0</td>
+            <td>44</td>
+            <td>134</td>
+            <td>5896</td>
+            <td class="text-center font-semibold">Row 7</td>
+        </tr>
+        
+        <tr data-category="high">
+            <td class="font-bold">P23</td>
+            <td>object</td>
+            <td>0.77</td>
+            <td><span class="badge badge-high">High</span></td>
+            <td class="text-cyan font-semibold">DGZ, Ocean, Blue</td>
+            <td>1.00</td>
+            <td>675.0</td>
+            <td>739.0</td>
+            <td>94</td>
+            <td>136</td>
+            <td>12784</td>
+            <td class="text-center font-semibold">Row 4</td>
+        </tr>
+        
+        <tr data-category="high">
+            <td class="font-bold">P24</td>
+            <td>object</td>
+            <td>0.77</td>
+            <td><span class="badge badge-high">High</span></td>
+            <td class="text-cyan font-semibold">Woods</td>
+            <td>0.59</td>
+            <td>22.5</td>
+            <td>191.5</td>
+            <td>45</td>
+            <td>153</td>
+            <td>6885</td>
+            <td class="text-center font-semibold">Row 2</td>
+        </tr>
+        
+        <tr data-category="high">
+            <td class="font-bold">P25</td>
+            <td>object</td>
+            <td>0.77</td>
+            <td><span class="badge badge-high">High</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>780.5</td>
+            <td>1373.5</td>
+            <td>43</td>
+            <td>141</td>
+            <td>6063</td>
+            <td class="text-center font-semibold">Row 7</td>
+        </tr>
+        
+        <tr data-category="high">
+            <td class="font-bold">P26</td>
+            <td>object</td>
+            <td>0.77</td>
+            <td><span class="badge badge-high">High</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>233.0</td>
+            <td>1158.0</td>
+            <td>44</td>
+            <td>142</td>
+            <td>6248</td>
+            <td class="text-center font-semibold">Row 6</td>
+        </tr>
+        
+        <tr data-category="high">
+            <td class="font-bold">P27</td>
+            <td>object</td>
+            <td>0.76</td>
+            <td><span class="badge badge-high">High</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>329.5</td>
+            <td>1159.5</td>
+            <td>37</td>
+            <td>133</td>
+            <td>4921</td>
+            <td class="text-center font-semibold">Row 6</td>
+        </tr>
+        
+        <tr data-category="high">
+            <td class="font-bold">P28</td>
+            <td>object</td>
+            <td>0.76</td>
+            <td><span class="badge badge-high">High</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>582.5</td>
+            <td>974.5</td>
+            <td>35</td>
+            <td>79</td>
+            <td>2765</td>
+            <td class="text-center font-semibold">Row 5</td>
+        </tr>
+        
+        <tr data-category="high">
+            <td class="font-bold">P29</td>
+            <td>object</td>
+            <td>0.75</td>
+            <td><span class="badge badge-high">High</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>285.0</td>
+            <td>1403.0</td>
+            <td>40</td>
+            <td>150</td>
+            <td>6000</td>
+            <td class="text-center font-semibold">Row 7</td>
+        </tr>
+        
+        <tr data-category="high">
+            <td class="font-bold">P30</td>
+            <td>object</td>
+            <td>0.75</td>
+            <td><span class="badge badge-high">High</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>863.5</td>
+            <td>1183.5</td>
+            <td>33</td>
+            <td>79</td>
+            <td>2607</td>
+            <td class="text-center font-semibold">Row 6</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P31</td>
+            <td>object</td>
+            <td>0.74</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>204.5</td>
+            <td>1402.5</td>
+            <td>37</td>
+            <td>145</td>
+            <td>5365</td>
+            <td class="text-center font-semibold">Row 7</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P32</td>
+            <td>object</td>
+            <td>0.74</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>327.0</td>
+            <td>1397.5</td>
+            <td>38</td>
+            <td>149</td>
+            <td>5662</td>
+            <td class="text-center font-semibold">Row 7</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P33</td>
+            <td>object</td>
+            <td>0.74</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>950.0</td>
+            <td>971.0</td>
+            <td>34</td>
+            <td>82</td>
+            <td>2788</td>
+            <td class="text-center font-semibold">Row 5</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P34</td>
+            <td>object</td>
+            <td>0.74</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>508.0</td>
+            <td>973.0</td>
+            <td>36</td>
+            <td>92</td>
+            <td>3312</td>
+            <td class="text-center font-semibold">Row 5</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P35</td>
+            <td>object</td>
+            <td>0.74</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>877.0</td>
+            <td>971.5</td>
+            <td>34</td>
+            <td>83</td>
+            <td>2822</td>
+            <td class="text-center font-semibold">Row 5</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P36</td>
+            <td>object</td>
+            <td>0.74</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>619.5</td>
+            <td>973.5</td>
+            <td>33</td>
+            <td>73</td>
+            <td>2409</td>
+            <td class="text-center font-semibold">Row 5</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P37</td>
+            <td>object</td>
+            <td>0.74</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-cyan font-semibold">D</td>
+            <td>0.54</td>
+            <td>937.5</td>
+            <td>724.5</td>
+            <td>109</td>
+            <td>133</td>
+            <td>14497</td>
+            <td class="text-center font-semibold">Row 4</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P38</td>
+            <td>object</td>
+            <td>0.74</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>721.0</td>
+            <td>968.0</td>
+            <td>26</td>
+            <td>80</td>
+            <td>2080</td>
+            <td class="text-center font-semibold">Row 5</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P39</td>
+            <td>object</td>
+            <td>0.74</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>655.5</td>
+            <td>973.0</td>
+            <td>33</td>
+            <td>72</td>
+            <td>2376</td>
+            <td class="text-center font-semibold">Row 5</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P40</td>
+            <td>object</td>
+            <td>0.74</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>838.0</td>
+            <td>973.5</td>
+            <td>38</td>
+            <td>85</td>
+            <td>3230</td>
+            <td class="text-center font-semibold">Row 5</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P41</td>
+            <td>object</td>
+            <td>0.73</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>102.5</td>
+            <td>958.5</td>
+            <td>53</td>
+            <td>157</td>
+            <td>8321</td>
+            <td class="text-center font-semibold">Row 5</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P42</td>
+            <td>object</td>
+            <td>0.73</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>826.5</td>
+            <td>1373.5</td>
+            <td>41</td>
+            <td>139</td>
+            <td>5699</td>
+            <td class="text-center font-semibold">Row 7</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P43</td>
+            <td>object</td>
+            <td>0.73</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>426.5</td>
+            <td>1566.5</td>
+            <td>41</td>
+            <td>67</td>
+            <td>2747</td>
+            <td class="text-center font-semibold">Row 8</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P44</td>
+            <td>object</td>
+            <td>0.73</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>899.0</td>
+            <td>1180.0</td>
+            <td>32</td>
+            <td>74</td>
+            <td>2368</td>
+            <td class="text-center font-semibold">Row 6</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P45</td>
+            <td>object</td>
+            <td>0.72</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>1003.0</td>
+            <td>1364.5</td>
+            <td>30</td>
+            <td>135</td>
+            <td>4050</td>
+            <td class="text-center font-semibold">Row 7</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P46</td>
+            <td>object</td>
+            <td>0.72</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>335.5</td>
+            <td>948.0</td>
+            <td>45</td>
+            <td>150</td>
+            <td>6750</td>
+            <td class="text-center font-semibold">Row 5</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P47</td>
+            <td>object</td>
+            <td>0.72</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>47.5</td>
+            <td>1170.5</td>
+            <td>43</td>
+            <td>145</td>
+            <td>6235</td>
+            <td class="text-center font-semibold">Row 6</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P48</td>
+            <td>object</td>
+            <td>0.72</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>192.5</td>
+            <td>716.5</td>
+            <td>51</td>
+            <td>155</td>
+            <td>7905</td>
+            <td class="text-center font-semibold">Row 4</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P49</td>
+            <td>object</td>
+            <td>0.72</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>123.5</td>
+            <td>1400.5</td>
+            <td>39</td>
+            <td>141</td>
+            <td>5499</td>
+            <td class="text-center font-semibold">Row 7</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P50</td>
+            <td>object</td>
+            <td>0.71</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>168.0</td>
+            <td>954.0</td>
+            <td>56</td>
+            <td>156</td>
+            <td>8736</td>
+            <td class="text-center font-semibold">Row 5</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P51</td>
+            <td>object</td>
+            <td>0.71</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>164.5</td>
+            <td>1402.0</td>
+            <td>35</td>
+            <td>142</td>
+            <td>4970</td>
+            <td class="text-center font-semibold">Row 7</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P52</td>
+            <td>object</td>
+            <td>0.71</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>244.5</td>
+            <td>1404.0</td>
+            <td>37</td>
+            <td>148</td>
+            <td>5476</td>
+            <td class="text-center font-semibold">Row 7</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P53</td>
+            <td>object</td>
+            <td>0.70</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>733.5</td>
+            <td>1383.5</td>
+            <td>45</td>
+            <td>121</td>
+            <td>5445</td>
+            <td class="text-center font-semibold">Row 7</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P54</td>
+            <td>object</td>
+            <td>0.70</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>917.0</td>
+            <td>1576.0</td>
+            <td>56</td>
+            <td>48</td>
+            <td>2688</td>
+            <td class="text-center font-semibold">Row 8</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P55</td>
+            <td>object</td>
+            <td>0.70</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>647.5</td>
+            <td>1404.0</td>
+            <td>39</td>
+            <td>86</td>
+            <td>3354</td>
+            <td class="text-center font-semibold">Row 7</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P56</td>
+            <td>object</td>
+            <td>0.70</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>572.0</td>
+            <td>1169.0</td>
+            <td>42</td>
+            <td>126</td>
+            <td>5292</td>
+            <td class="text-center font-semibold">Row 6</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P57</td>
+            <td>object</td>
+            <td>0.69</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>467.5</td>
+            <td>946.5</td>
+            <td>37</td>
+            <td>143</td>
+            <td>5291</td>
+            <td class="text-center font-semibold">Row 5</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P58</td>
+            <td>object</td>
+            <td>0.69</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>406.5</td>
+            <td>1399.5</td>
+            <td>37</td>
+            <td>157</td>
+            <td>5809</td>
+            <td class="text-center font-semibold">Row 7</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P59</td>
+            <td>object</td>
+            <td>0.68</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>382.5</td>
+            <td>1567.5</td>
+            <td>41</td>
+            <td>65</td>
+            <td>2665</td>
+            <td class="text-center font-semibold">Row 8</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P60</td>
+            <td>object</td>
+            <td>0.68</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-cyan font-semibold">MFOGG</td>
+            <td>0.55</td>
+            <td>371.0</td>
+            <td>209.0</td>
+            <td>166</td>
+            <td>140</td>
+            <td>23240</td>
+            <td class="text-center font-semibold">Row 2</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P61</td>
+            <td>object</td>
+            <td>0.67</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>372.0</td>
+            <td>1159.0</td>
+            <td>42</td>
+            <td>134</td>
+            <td>5628</td>
+            <td class="text-center font-semibold">Row 6</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P62</td>
+            <td>object</td>
+            <td>0.67</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>934.0</td>
+            <td>1180.0</td>
+            <td>32</td>
+            <td>74</td>
+            <td>2368</td>
+            <td class="text-center font-semibold">Row 6</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P63</td>
+            <td>object</td>
+            <td>0.67</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>968.5</td>
+            <td>1149.5</td>
+            <td>35</td>
+            <td>139</td>
+            <td>4865</td>
+            <td class="text-center font-semibold">Row 6</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P64</td>
+            <td>object</td>
+            <td>0.67</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>718.5</td>
+            <td>1184.5</td>
+            <td>35</td>
+            <td>87</td>
+            <td>3045</td>
+            <td class="text-center font-semibold">Row 6</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P65</td>
+            <td>object</td>
+            <td>0.66</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-cyan font-semibold">CEO</td>
+            <td>0.60</td>
+            <td>1029.0</td>
+            <td>498.0</td>
+            <td>84</td>
+            <td>124</td>
+            <td>10416</td>
+            <td class="text-center font-semibold">Row 3</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P66</td>
+            <td>object</td>
+            <td>0.66</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>517.5</td>
+            <td>1165.5</td>
+            <td>37</td>
+            <td>127</td>
+            <td>4699</td>
+            <td class="text-center font-semibold">Row 6</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P67</td>
+            <td>object</td>
+            <td>0.66</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-cyan font-semibold">Qods</td>
+            <td>0.50</td>
+            <td>81.0</td>
+            <td>193.0</td>
+            <td>62</td>
+            <td>158</td>
+            <td>9796</td>
+            <td class="text-center font-semibold">Row 2</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P68</td>
+            <td>object</td>
+            <td>0.66</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>986.5</td>
+            <td>972.5</td>
+            <td>37</td>
+            <td>79</td>
+            <td>2923</td>
+            <td class="text-center font-semibold">Row 5</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P69</td>
+            <td>object</td>
+            <td>0.65</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>48.5</td>
+            <td>960.0</td>
+            <td>47</td>
+            <td>154</td>
+            <td>7238</td>
+            <td class="text-center font-semibold">Row 5</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P70</td>
+            <td>object</td>
+            <td>0.64</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>755.5</td>
+            <td>1190.0</td>
+            <td>33</td>
+            <td>96</td>
+            <td>3168</td>
+            <td class="text-center font-semibold">Row 6</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P71</td>
+            <td>object</td>
+            <td>0.64</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>610.5</td>
+            <td>1405.5</td>
+            <td>33</td>
+            <td>81</td>
+            <td>2673</td>
+            <td class="text-center font-semibold">Row 7</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P72</td>
+            <td>object</td>
+            <td>0.64</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>826.0</td>
+            <td>1189.0</td>
+            <td>38</td>
+            <td>96</td>
+            <td>3648</td>
+            <td class="text-center font-semibold">Row 6</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P73</td>
+            <td>object</td>
+            <td>0.64</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>54.5</td>
+            <td>711.5</td>
+            <td>45</td>
+            <td>167</td>
+            <td>7515</td>
+            <td class="text-center font-semibold">Row 4</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P74</td>
+            <td>object</td>
+            <td>0.64</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>70.0</td>
+            <td>1573.0</td>
+            <td>46</td>
+            <td>54</td>
+            <td>2484</td>
+            <td class="text-center font-semibold">Row 8</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P75</td>
+            <td>object</td>
+            <td>0.64</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-cyan font-semibold">DG</td>
+            <td>1.00</td>
+            <td>1143.0</td>
+            <td>495.5</td>
+            <td>114</td>
+            <td>149</td>
+            <td>16986</td>
+            <td class="text-center font-semibold">Row 3</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P76</td>
+            <td>object</td>
+            <td>0.63</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>687.5</td>
+            <td>1402.5</td>
+            <td>37</td>
+            <td>85</td>
+            <td>3145</td>
+            <td class="text-center font-semibold">Row 7</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P77</td>
+            <td>object</td>
+            <td>0.63</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>339.5</td>
+            <td>1569.5</td>
+            <td>37</td>
+            <td>61</td>
+            <td>2257</td>
+            <td class="text-center font-semibold">Row 8</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P78</td>
+            <td>object</td>
+            <td>0.62</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>658.0</td>
+            <td>1168.0</td>
+            <td>30</td>
+            <td>106</td>
+            <td>3180</td>
+            <td class="text-center font-semibold">Row 6</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P79</td>
+            <td>object</td>
+            <td>0.61</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>756.5</td>
+            <td>969.0</td>
+            <td>35</td>
+            <td>82</td>
+            <td>2870</td>
+            <td class="text-center font-semibold">Row 5</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P80</td>
+            <td>object</td>
+            <td>0.61</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>787.5</td>
+            <td>1188.0</td>
+            <td>31</td>
+            <td>92</td>
+            <td>2852</td>
+            <td class="text-center font-semibold">Row 6</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P81</td>
+            <td>object</td>
+            <td>0.60</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>1094.0</td>
+            <td>1144.0</td>
+            <td>44</td>
+            <td>128</td>
+            <td>5632</td>
+            <td class="text-center font-semibold">Row 6</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P82</td>
+            <td>object</td>
+            <td>0.59</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>126.5</td>
+            <td>715.0</td>
+            <td>55</td>
+            <td>162</td>
+            <td>8910</td>
+            <td class="text-center font-semibold">Row 4</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P83</td>
+            <td>object</td>
+            <td>0.59</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>830.0</td>
+            <td>726.0</td>
+            <td>92</td>
+            <td>124</td>
+            <td>11408</td>
+            <td class="text-center font-semibold">Row 4</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P84</td>
+            <td>object</td>
+            <td>0.58</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>1036.0</td>
+            <td>1364.5</td>
+            <td>30</td>
+            <td>135</td>
+            <td>4050</td>
+            <td class="text-center font-semibold">Row 7</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P85</td>
+            <td>object</td>
+            <td>0.58</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>617.0</td>
+            <td>1166.0</td>
+            <td>34</td>
+            <td>122</td>
+            <td>4148</td>
+            <td class="text-center font-semibold">Row 6</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P86</td>
+            <td>object</td>
+            <td>0.57</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>1113.0</td>
+            <td>28.5</td>
+            <td>172</td>
+            <td>57</td>
+            <td>9804</td>
+            <td class="text-center font-semibold">Row 1</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P87</td>
+            <td>object</td>
+            <td>0.57</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>1008.5</td>
+            <td>1148.5</td>
+            <td>39</td>
+            <td>141</td>
+            <td>5499</td>
+            <td class="text-center font-semibold">Row 6</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P88</td>
+            <td>object</td>
+            <td>0.56</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>1173.5</td>
+            <td>939.0</td>
+            <td>37</td>
+            <td>150</td>
+            <td>5550</td>
+            <td class="text-center font-semibold">Row 5</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P89</td>
+            <td>object</td>
+            <td>0.56</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>785.5</td>
+            <td>1569.5</td>
+            <td>51</td>
+            <td>61</td>
+            <td>3111</td>
+            <td class="text-center font-semibold">Row 8</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P90</td>
+            <td>object</td>
+            <td>0.55</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>1072.5</td>
+            <td>939.5</td>
+            <td>51</td>
+            <td>145</td>
+            <td>7395</td>
+            <td class="text-center font-semibold">Row 5</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P91</td>
+            <td>object</td>
+            <td>0.54</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>572.0</td>
+            <td>1395.5</td>
+            <td>38</td>
+            <td>103</td>
+            <td>3914</td>
+            <td class="text-center font-semibold">Row 7</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P92</td>
+            <td>object</td>
+            <td>0.54</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>1072.0</td>
+            <td>1366.0</td>
+            <td>38</td>
+            <td>136</td>
+            <td>5168</td>
+            <td class="text-center font-semibold">Row 7</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P93</td>
+            <td>object</td>
+            <td>0.53</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>1154.0</td>
+            <td>1146.5</td>
+            <td>56</td>
+            <td>127</td>
+            <td>7112</td>
+            <td class="text-center font-semibold">Row 6</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P94</td>
+            <td>object</td>
+            <td>0.53</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>115.0</td>
+            <td>1572.0</td>
+            <td>36</td>
+            <td>56</td>
+            <td>2016</td>
+            <td class="text-center font-semibold">Row 8</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P95</td>
+            <td>object</td>
+            <td>0.53</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-cyan font-semibold">BELLAVITA</td>
+            <td>0.77</td>
+            <td>128.0</td>
+            <td>471.5</td>
+            <td>182</td>
+            <td>161</td>
+            <td>29302</td>
+            <td class="text-center font-semibold">Row 3</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P96</td>
+            <td>object</td>
+            <td>0.51</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>753.0</td>
+            <td>728.5</td>
+            <td>52</td>
+            <td>123</td>
+            <td>6396</td>
+            <td class="text-center font-semibold">Row 4</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P97</td>
+            <td>object</td>
+            <td>0.50</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>298.5</td>
+            <td>1571.0</td>
+            <td>35</td>
+            <td>58</td>
+            <td>2030</td>
+            <td class="text-center font-semibold">Row 8</td>
+        </tr>
+        
+        <tr data-category="medium">
+            <td class="font-bold">P98</td>
+            <td>object</td>
+            <td>0.50</td>
+            <td><span class="badge badge-medium">Medium</span></td>
+            <td class="text-cyan font-semibold">DGZ</td>
+            <td>0.96</td>
+            <td>474.5</td>
+            <td>726.0</td>
+            <td>85</td>
+            <td>124</td>
+            <td>10540</td>
+            <td class="text-center font-semibold">Row 4</td>
+        </tr>
+        
+        <tr data-category="low">
+            <td class="font-bold">P99</td>
+            <td>object</td>
+            <td>0.49</td>
+            <td><span class="badge badge-low">Low</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>205.5</td>
+            <td>222.0</td>
+            <td>153</td>
+            <td>102</td>
+            <td>15606</td>
+            <td class="text-center font-semibold">Row 2</td>
+        </tr>
+        
+        <tr data-category="low">
+            <td class="font-bold">P100</td>
+            <td>object</td>
+            <td>0.49</td>
+            <td><span class="badge badge-low">Low</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>864.0</td>
+            <td>1573.5</td>
+            <td>40</td>
+            <td>53</td>
+            <td>2120</td>
+            <td class="text-center font-semibold">Row 8</td>
+        </tr>
+        
+        <tr data-category="low">
+            <td class="font-bold">P101</td>
+            <td>object</td>
+            <td>0.48</td>
+            <td><span class="badge badge-low">Low</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>411.0</td>
+            <td>1158.0</td>
+            <td>28</td>
+            <td>130</td>
+            <td>3640</td>
+            <td class="text-center font-semibold">Row 6</td>
+        </tr>
+        
+        <tr data-category="low">
+            <td class="font-bold">P102</td>
+            <td>object</td>
+            <td>0.48</td>
+            <td><span class="badge badge-low">Low</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>1163.5</td>
+            <td>1362.5</td>
+            <td>31</td>
+            <td>141</td>
+            <td>4371</td>
+            <td class="text-center font-semibold">Row 7</td>
+        </tr>
+        
+        <tr data-category="low">
+            <td class="font-bold">P103</td>
+            <td>object</td>
+            <td>0.48</td>
+            <td><span class="badge badge-low">Low</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>9.0</td>
+            <td>959.5</td>
+            <td>18</td>
+            <td>139</td>
+            <td>2502</td>
+            <td class="text-center font-semibold">Row 5</td>
+        </tr>
+        
+        <tr data-category="low">
+            <td class="font-bold">P104</td>
+            <td>object</td>
+            <td>0.48</td>
+            <td><span class="badge badge-low">Low</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>1129.5</td>
+            <td>1364.0</td>
+            <td>35</td>
+            <td>140</td>
+            <td>4900</td>
+            <td class="text-center font-semibold">Row 7</td>
+        </tr>
+        
+        <tr data-category="low">
+            <td class="font-bold">P105</td>
+            <td>object</td>
+            <td>0.48</td>
+            <td><span class="badge badge-low">Low</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>449.5</td>
+            <td>1391.0</td>
+            <td>37</td>
+            <td>136</td>
+            <td>5032</td>
+            <td class="text-center font-semibold">Row 7</td>
+        </tr>
+        
+        <tr data-category="low">
+            <td class="font-bold">P106</td>
+            <td>object</td>
+            <td>0.45</td>
+            <td><span class="badge badge-low">Low</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>472.0</td>
+            <td>1567.5</td>
+            <td>44</td>
+            <td>65</td>
+            <td>2860</td>
+            <td class="text-center font-semibold">Row 8</td>
+        </tr>
+        
+        <tr data-category="low">
+            <td class="font-bold">P107</td>
+            <td>object</td>
+            <td>0.45</td>
+            <td><span class="badge badge-low">Low</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>1194.0</td>
+            <td>938.5</td>
+            <td>12</td>
+            <td>149</td>
+            <td>1788</td>
+            <td class="text-center font-semibold">Row 5</td>
+        </tr>
+        
+        <tr data-category="low">
+            <td class="font-bold">P108</td>
+            <td>object</td>
+            <td>0.45</td>
+            <td><span class="badge badge-low">Low</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>538.5</td>
+            <td>1568.5</td>
+            <td>75</td>
+            <td>63</td>
+            <td>4725</td>
+            <td class="text-center font-semibold">Row 8</td>
+        </tr>
+        
+        <tr data-category="low">
+            <td class="font-bold">P109</td>
+            <td>object</td>
+            <td>0.44</td>
+            <td><span class="badge badge-low">Low</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>152.5</td>
+            <td>1570.0</td>
+            <td>25</td>
+            <td>60</td>
+            <td>1500</td>
+            <td class="text-center font-semibold">Row 8</td>
+        </tr>
+        
+        <tr data-category="low">
+            <td class="font-bold">P110</td>
+            <td>object</td>
+            <td>0.44</td>
+            <td><span class="badge badge-low">Low</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>491.5</td>
+            <td>1379.0</td>
+            <td>41</td>
+            <td>140</td>
+            <td>5740</td>
+            <td class="text-center font-semibold">Row 7</td>
+        </tr>
+        
+        <tr data-category="low">
+            <td class="font-bold">P111</td>
+            <td>object</td>
+            <td>0.42</td>
+            <td><span class="badge badge-low">Low</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>831.0</td>
+            <td>1576.5</td>
+            <td>32</td>
+            <td>47</td>
+            <td>1504</td>
+            <td class="text-center font-semibold">Row 8</td>
+        </tr>
+        
+        <tr data-category="low">
+            <td class="font-bold">P112</td>
+            <td>object</td>
+            <td>0.42</td>
+            <td><span class="badge badge-low">Low</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>183.0</td>
+            <td>1570.0</td>
+            <td>34</td>
+            <td>60</td>
+            <td>2040</td>
+            <td class="text-center font-semibold">Row 8</td>
+        </tr>
+        
+        <tr data-category="low">
+            <td class="font-bold">P113</td>
+            <td>object</td>
+            <td>0.41</td>
+            <td><span class="badge badge-low">Low</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>1146.0</td>
+            <td>1364.0</td>
+            <td>48</td>
+            <td>142</td>
+            <td>6816</td>
+            <td class="text-center font-semibold">Row 7</td>
+        </tr>
+        
+        <tr data-category="low">
+            <td class="font-bold">P114</td>
+            <td>object</td>
+            <td>0.40</td>
+            <td><span class="badge badge-low">Low</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>687.0</td>
+            <td>1172.0</td>
+            <td>22</td>
+            <td>96</td>
+            <td>2112</td>
+            <td class="text-center font-semibold">Row 6</td>
+        </tr>
+        
+        <tr data-category="low">
+            <td class="font-bold">P115</td>
+            <td>object</td>
+            <td>0.40</td>
+            <td><span class="badge badge-low">Low</span></td>
+            <td class="text-cyan font-semibold">X60 Pcs</td>
+            <td>0.77</td>
+            <td>349.0</td>
+            <td>13.0</td>
+            <td>114</td>
+            <td>26</td>
+            <td>2964</td>
+            <td class="text-center font-semibold">Row 1</td>
+        </tr>
+        
+        <tr data-category="low">
+            <td class="font-bold">P116</td>
+            <td>object</td>
+            <td>0.40</td>
+            <td><span class="badge badge-low">Low</span></td>
+            <td class="text-cyan font-semibold">DGZ</td>
+            <td>1.00</td>
+            <td>509.0</td>
+            <td>477.0</td>
+            <td>186</td>
+            <td>156</td>
+            <td>29016</td>
+            <td class="text-center font-semibold">Row 3</td>
+        </tr>
+        
+        <tr data-category="low">
+            <td class="font-bold">P117</td>
+            <td>object</td>
+            <td>0.39</td>
+            <td><span class="badge badge-low">Low</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>257.5</td>
+            <td>1570.5</td>
+            <td>39</td>
+            <td>59</td>
+            <td>2301</td>
+            <td class="text-center font-semibold">Row 8</td>
+        </tr>
+        
+        <tr data-category="low">
+            <td class="font-bold">P118</td>
+            <td>object</td>
+            <td>0.38</td>
+            <td><span class="badge badge-low">Low</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>512.0</td>
+            <td>14.0</td>
+            <td>202</td>
+            <td>28</td>
+            <td>5656</td>
+            <td class="text-center font-semibold">Row 1</td>
+        </tr>
+        
+        <tr data-category="low">
+            <td class="font-bold">P119</td>
+            <td>object</td>
+            <td>0.37</td>
+            <td><span class="badge badge-low">Low</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>840.0</td>
+            <td>508.0</td>
+            <td>34</td>
+            <td>98</td>
+            <td>3332</td>
+            <td class="text-center font-semibold">Row 3</td>
+        </tr>
+        
+        <tr data-category="low">
+            <td class="font-bold">P120</td>
+            <td>object</td>
+            <td>0.37</td>
+            <td><span class="badge badge-low">Low</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>725.5</td>
+            <td>1570.0</td>
+            <td>57</td>
+            <td>60</td>
+            <td>3420</td>
+            <td class="text-center font-semibold">Row 8</td>
+        </tr>
+        
+        <tr data-category="low">
+            <td class="font-bold">P121</td>
+            <td>object</td>
+            <td>0.37</td>
+            <td><span class="badge badge-low">Low</span></td>
+            <td class="text-cyan font-semibold">BELLAVITA</td>
+            <td>1.00</td>
+            <td>562.0</td>
+            <td>187.5</td>
+            <td>202</td>
+            <td>181</td>
+            <td>36562</td>
+            <td class="text-center font-semibold">Row 2</td>
+        </tr>
+        
+        <tr data-category="low">
+            <td class="font-bold">P122</td>
+            <td>object</td>
+            <td>0.35</td>
+            <td><span class="badge badge-low">Low</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>22.0</td>
+            <td>1427.5</td>
+            <td>44</td>
+            <td>139</td>
+            <td>6116</td>
+            <td class="text-center font-semibold">Row 7</td>
+        </tr>
+        
+        <tr data-category="low">
+            <td class="font-bold">P123</td>
+            <td>object</td>
+            <td>0.34</td>
+            <td><span class="badge badge-low">Low</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>15.0</td>
+            <td>439.5</td>
+            <td>30</td>
+            <td>173</td>
+            <td>5190</td>
+            <td class="text-center font-semibold">Row 3</td>
+        </tr>
+        
+        <tr data-category="low">
+            <td class="font-bold">P124</td>
+            <td>object</td>
+            <td>0.34</td>
+            <td><span class="badge badge-low">Low</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>700.0</td>
+            <td>480.5</td>
+            <td>184</td>
+            <td>147</td>
+            <td>27048</td>
+            <td class="text-center font-semibold">Row 3</td>
+        </tr>
+        
+        <tr data-category="low">
+            <td class="font-bold">P125</td>
+            <td>object</td>
+            <td>0.33</td>
+            <td><span class="badge badge-low">Low</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>1191.5</td>
+            <td>1364.5</td>
+            <td>17</td>
+            <td>139</td>
+            <td>2363</td>
+            <td class="text-center font-semibold">Row 7</td>
+        </tr>
+        
+        <tr data-category="low">
+            <td class="font-bold">P126</td>
+            <td>object</td>
+            <td>0.33</td>
+            <td><span class="badge badge-low">Low</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>315.5</td>
+            <td>476.5</td>
+            <td>183</td>
+            <td>151</td>
+            <td>27633</td>
+            <td class="text-center font-semibold">Row 3</td>
+        </tr>
+        
+        <tr data-category="low">
+            <td class="font-bold">P127</td>
+            <td>object</td>
+            <td>0.32</td>
+            <td><span class="badge badge-low">Low</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>1190.0</td>
+            <td>715.0</td>
+            <td>20</td>
+            <td>156</td>
+            <td>3120</td>
+            <td class="text-center font-semibold">Row 4</td>
+        </tr>
+        
+        <tr data-category="low">
+            <td class="font-bold">P128</td>
+            <td>object</td>
+            <td>0.31</td>
+            <td><span class="badge badge-low">Low</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>1089.0</td>
+            <td>942.5</td>
+            <td>30</td>
+            <td>139</td>
+            <td>4170</td>
+            <td class="text-center font-semibold">Row 5</td>
+        </tr>
+        
+        <tr data-category="low">
+            <td class="font-bold">P129</td>
+            <td>object</td>
+            <td>0.30</td>
+            <td><span class="badge badge-low">Low</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>1026.5</td>
+            <td>938.5</td>
+            <td>35</td>
+            <td>145</td>
+            <td>5075</td>
+            <td class="text-center font-semibold">Row 5</td>
+        </tr>
+        
+        <tr data-category="low">
+            <td class="font-bold">P130</td>
+            <td>object</td>
+            <td>0.29</td>
+            <td><span class="badge badge-low">Low</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>14.5</td>
+            <td>706.0</td>
+            <td>29</td>
+            <td>164</td>
+            <td>4756</td>
+            <td class="text-center font-semibold">Row 4</td>
+        </tr>
+        
+        <tr data-category="low">
+            <td class="font-bold">P131</td>
+            <td>object</td>
+            <td>0.27</td>
+            <td><span class="badge badge-low">Low</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>954.5</td>
+            <td>26.0</td>
+            <td>115</td>
+            <td>52</td>
+            <td>5980</td>
+            <td class="text-center font-semibold">Row 1</td>
+        </tr>
+        
+        <tr data-category="low">
+            <td class="font-bold">P132</td>
+            <td>object</td>
+            <td>0.27</td>
+            <td><span class="badge badge-low">Low</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>481.5</td>
+            <td>1162.5</td>
+            <td>31</td>
+            <td>127</td>
+            <td>3937</td>
+            <td class="text-center font-semibold">Row 6</td>
+        </tr>
+        
+        <tr data-category="low">
+            <td class="font-bold">P133</td>
+            <td>object</td>
+            <td>0.27</td>
+            <td><span class="badge badge-low">Low</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>1091.0</td>
+            <td>1367.0</td>
+            <td>32</td>
+            <td>138</td>
+            <td>4416</td>
+            <td class="text-center font-semibold">Row 7</td>
+        </tr>
+        
+        <tr data-category="low">
+            <td class="font-bold">P134</td>
+            <td>object</td>
+            <td>0.27</td>
+            <td><span class="badge badge-low">Low</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>904.0</td>
+            <td>504.0</td>
+            <td>32</td>
+            <td>102</td>
+            <td>3264</td>
+            <td class="text-center font-semibold">Row 3</td>
+        </tr>
+        
+        <tr data-category="low">
+            <td class="font-bold">P135</td>
+            <td>object</td>
+            <td>0.25</td>
+            <td><span class="badge badge-low">Low</span></td>
+            <td class="text-muted">Not detected</td>
+            <td>—</td>
+            <td>872.0</td>
+            <td>506.0</td>
+            <td>28</td>
+            <td>98</td>
+            <td>2744</td>
+            <td class="text-center font-semibold">Row 3</td>
+        </tr>
+        
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- SECTION 8: SYSTEM ARCHITECTURE WORKFLOW -->
+    <div class="section-title">Section 8 — End-to-End System Pipeline</div>
+    <div class="flow-container">
+        <div class="flow-step">
+            <div class="flow-step-num">Step 1</div>
+            <div class="flow-step-title">Shelf Image</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+            <div class="flow-step-num">Step 2</div>
+            <div class="flow-step-title">YOLO Detection</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+            <div class="flow-step-num">Step 3</div>
+            <div class="flow-step-title">Product Cropping</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+            <div class="flow-step-num">Step 4</div>
+            <div class="flow-step-title">EasyOCR</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+            <div class="flow-step-num">Step 5</div>
+            <div class="flow-step-title">Shelf Analysis</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+            <div class="flow-step-num">Step 6</div>
+            <div class="flow-step-title">Visual Analytics</div>
+        </div>
+    </div>
+
+        </div>
+    </details>
+
+    <footer>
+        Retail Shelf Intelligence • Academic Computer Vision Project • Auto-generated Report
+    </footer>
+
+</div>
+
+<script>
+function filterTable() {
+    const searchVal = document.getElementById("searchInput").value.toLowerCase();
+    const confVal = document.getElementById("confidenceFilter").value.toLowerCase();
+    const rows = document.querySelectorAll("#productsTable tbody tr");
+    let visibleCount = 0;
+
+    rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        const confCategory = row.getAttribute("data-category") || "";
+        const matchesSearch = text.includes(searchVal);
+        const matchesConf = (confVal === "all" || confCategory === confVal);
+
+        if (matchesSearch && matchesConf) {
+            row.style.display = "";
+            visibleCount++;
+        } else {
+            row.style.display = "none";
+        }
+    });
+
+    document.getElementById("visibleCount").textContent = visibleCount;
+}
+
+// The static analytics above are the partner's generated report. This small panel calls the real backend.
+const API_BASE = "/api/v1";
+const statusNode = document.getElementById("apiStatus");
+const resultNode = document.getElementById("auditResult");
+const toastNode = document.getElementById("restockToast");
+const fileInput = document.getElementById("shelfImage");
+const fileNameNode = document.getElementById("selectedFileName");
+const auditButton = document.getElementById("runAudit");
+const auditVisual = document.getElementById("auditVisual");
+const annotatedShelfImage = document.getElementById("annotatedShelfImage");
+const auditVisualMeta = document.getElementById("auditVisualMeta");
+const cameraPanel = document.getElementById("cameraPanel");
+const cameraPreview = document.getElementById("cameraPreview");
+let capturedImage = null;
+let cameraStream = null;
+let catalogueProducts = [];
+let planogramSlots = [];
+let currentAudit = null;
+
+function escapeHtml(value) {
+    return String(value ?? "").replace(/[&<>"']/g, character => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;"
+    })[character]);
+}
+
+function currentContext() {
+    return {
+        store_id: document.getElementById("storeId").value.trim(),
+        shelf_id: document.getElementById("shelfId").value.trim(),
+        operator: document.getElementById("operator").value.trim() || "Student Auditor"
+    };
+}
+
+async function apiRequest(path, options = {}) {
+    const response = await fetch(`${API_BASE}${path}`, options);
+    const payload = await response.json().catch(() => ({ detail: "Unexpected server response" }));
+    if (!response.ok) throw new Error(payload.detail || `Request failed (${response.status})`);
+    return payload;
+}
+
+async function refreshSystemStatus() {
+    try {
+        const health = await apiRequest("/health");
+        statusNode.textContent = health.model_ready ? "● API and model ready" : "● API online — model training required";
+        statusNode.style.color = health.model_ready ? "var(--accent-emerald)" : "var(--accent-amber)";
+        const alerts = await apiRequest("/alerts?status=open");
+        if (alerts.length) {
+            toastNode.style.display = "block";
+            toastNode.textContent = `Restock reminder: ${alerts.length} active item${alerts.length === 1 ? "" : "s"}. ${alerts.slice(0, 2).map(a => `${a.sku} (row ${a.row}: ${a.observed_facings}/${a.minimum_facings})`).join("; ")}`;
+        }
+    } catch (error) {
+        statusNode.textContent = "● Backend unavailable — start Docker or FastAPI";
+        statusNode.style.color = "var(--accent-rose)";
+    }
+}
+
+function renderCatalogueOptions() {
+    const select = document.getElementById("planogramSku");
+    const previous = select.value;
+    select.innerHTML = `<option value="">Select product SKU</option>${catalogueProducts.map(product =>
+        `<option value="${escapeHtml(product.sku)}">${escapeHtml(product.sku)} — ${escapeHtml(product.name)}</option>`
+    ).join("")}`;
+    select.value = previous;
+}
+
+async function loadCatalogue() {
+    catalogueProducts = await apiRequest("/products");
+    renderCatalogueOptions();
+}
+
+function renderPlanogramSlots() {
+    const node = document.getElementById("planogramSlots");
+    if (!planogramSlots.length) {
+        node.innerHTML = `<div class="empty-state">No planogram slots yet. Add one row/product requirement above.</div>`;
+        return;
+    }
+    node.innerHTML = planogramSlots.map((slot, index) =>
+        `<div class="slot-item"><span><strong>Row ${escapeHtml(slot.row)} · ${escapeHtml(slot.sku)}</strong><br>${escapeHtml(slot.expected_facings)} expected · ${escapeHtml(slot.minimum_facings)} minimum · ${escapeHtml(slot.position_hint || "any position")}</span><button class="compact-button danger" type="button" data-slot-index="${index}">Remove</button></div>`
+    ).join("");
+    node.querySelectorAll("[data-slot-index]").forEach(button => button.addEventListener("click", () => {
+        planogramSlots.splice(Number(button.dataset.slotIndex), 1);
+        renderPlanogramSlots();
+    }));
+}
+
+async function loadPlanogram() {
+    const context = currentContext();
+    const status = document.getElementById("planogramStatus");
+    if (!context.store_id || !context.shelf_id) {
+        status.textContent = "Enter a store and shelf ID first.";
+        return;
+    }
+    try {
+        const planogram = await apiRequest(`/planograms/${encodeURIComponent(context.store_id)}/${encodeURIComponent(context.shelf_id)}`);
+        planogramSlots = planogram.slots || [];
+        document.getElementById("planogramName").value = planogram.name || "";
+        renderPlanogramSlots();
+        status.textContent = `Loaded ${planogramSlots.length} slot(s) for this shelf.`;
+    } catch (error) {
+        planogramSlots = [];
+        renderPlanogramSlots();
+        status.textContent = error.message.includes("not found") ? "No saved planogram for this shelf yet. Add slots and save one." : `Could not load planogram: ${error.message}`;
+    }
+}
+
+async function savePlanogram() {
+    const context = currentContext();
+    const status = document.getElementById("planogramStatus");
+    if (!context.store_id || !context.shelf_id || !planogramSlots.length) {
+        status.textContent = "Add at least one slot and ensure store/shelf IDs are set.";
+        return;
+    }
+    try {
+        await apiRequest(`/planograms/${encodeURIComponent(context.store_id)}/${encodeURIComponent(context.shelf_id)}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json", "X-User-Role": "auditor" },
+            body: JSON.stringify({
+                store_id: context.store_id,
+                shelf_id: context.shelf_id,
+                name: document.getElementById("planogramName").value.trim() || "Shelf planogram",
+                slots: planogramSlots
+            })
+        });
+        status.textContent = "Planogram saved. Your next audit will compare against these facings.";
+    } catch (error) {
+        status.textContent = `Planogram not saved: ${error.message}`;
+    }
+}
+
+async function addCatalogueProduct() {
+    const status = document.getElementById("planogramStatus");
+    const sku = document.getElementById("productSku").value.trim();
+    const name = document.getElementById("productName").value.trim();
+    const aliases = document.getElementById("productAliases").value.split(",").map(value => value.trim()).filter(Boolean);
+    if (!sku || !name) {
+        status.textContent = "Enter both SKU and product name.";
+        return;
+    }
+    try {
+        await apiRequest("/products", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "X-User-Role": "auditor" },
+            body: JSON.stringify({ sku, name, ocr_aliases: aliases })
+        });
+        document.getElementById("productSku").value = "";
+        document.getElementById("productName").value = "";
+        document.getElementById("productAliases").value = "";
+        await loadCatalogue();
+        document.getElementById("planogramSku").value = sku;
+        status.textContent = `${sku} added to the catalogue.`;
+    } catch (error) {
+        status.textContent = `Product not added: ${error.message}`;
+    }
+}
+
+function addPlanogramSlot() {
+    const status = document.getElementById("planogramStatus");
+    const row = Number(document.getElementById("planogramRow").value);
+    const sku = document.getElementById("planogramSku").value;
+    const expected = Number(document.getElementById("planogramExpected").value);
+    const minimum = Number(document.getElementById("planogramMinimum").value);
+    const position = document.getElementById("planogramPosition").value || null;
+    if (!Number.isInteger(row) || row < 1 || !sku || !Number.isInteger(expected) || !Number.isInteger(minimum) || minimum > expected) {
+        status.textContent = "Use a valid row/SKU; minimum facings cannot exceed expected facings.";
+        return;
+    }
+    planogramSlots.push({ row, sku, expected_facings: expected, minimum_facings: minimum, position_hint: position });
+    renderPlanogramSlots();
+    status.textContent = "Slot added locally. Save planogram to make it active.";
+}
+
+function productOptions(selectedSku = "") {
+    return `<option value="">Select SKU</option>${catalogueProducts.map(product =>
+        `<option value="${escapeHtml(product.sku)}" ${product.sku === selectedSku ? "selected" : ""}>${escapeHtml(product.sku)} — ${escapeHtml(product.name)}</option>`
+    ).join("")}`;
+}
+
+function renderReviewQueue(audit) {
+    const node = document.getElementById("reviewList");
+    if (!audit) {
+        node.innerHTML = `<div class="empty-state">Run or open an audit to review uncertain detections.</div>`;
+        return;
+    }
+    const unresolved = (audit.detections || []).filter(item => !item.excluded && !item.resolved_sku);
+    if (!unresolved.length) {
+        node.innerHTML = `<div class="empty-state">This audit has no unresolved detections. Its review decision is complete.</div>`;
+        return;
+    }
+    node.innerHTML = unresolved.map(item => `<article class="review-item">
+        ${item.crop_url ? `<img class="review-crop" src="${escapeHtml(item.crop_url)}" alt="Product crop for review">` : `<div class="review-crop"></div>`}
+        <div><strong>Detection ${escapeHtml(item.detection_id.slice(0, 8))}</strong> <small>· row ${escapeHtml(item.row || "–")} · ${Math.round((item.confidence || 0) * 100)}% AI confidence</small>
+        <br><small>OCR: ${escapeHtml(item.ocr_text || "No readable text")}</small>
+        <div class="review-controls"><select id="review-sku-${escapeHtml(item.detection_id)}">${productOptions()}</select><button class="compact-button success" type="button" data-review-action="correct" data-detection-id="${escapeHtml(item.detection_id)}">Apply SKU</button><button class="compact-button danger" type="button" data-review-action="remove" data-detection-id="${escapeHtml(item.detection_id)}">Remove</button></div></div>
+    </article>`).join("");
+    node.querySelectorAll("[data-review-action]").forEach(button => button.addEventListener("click", () =>
+        submitReview(button.dataset.detectionId, button.dataset.reviewAction)
+    ));
+}
+
+async function submitReview(detectionId, action) {
+    if (!currentAudit) return;
+    const context = currentContext();
+    const sku = document.getElementById(`review-sku-${detectionId}`).value;
+    if (action === "correct" && !sku) {
+        document.getElementById("auditResult").textContent = "Choose a catalogue SKU before applying a human correction.";
+        return;
+    }
+    try {
+        const audit = await apiRequest(`/audits/${encodeURIComponent(currentAudit._id)}/overrides`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "X-User-Role": "auditor" },
+            body: JSON.stringify({
+                detection_id: detectionId,
+                action,
+                corrected_sku: action === "correct" ? sku : null,
+                reviewer: context.operator,
+                reason: action === "remove" ? "Not a valid product facing" : "Auditor confirmed product identity"
+            })
+        });
+        setCurrentAudit(audit, "Human decision saved. Planogram and alerts were recalculated.");
+        await refreshOperations();
+    } catch (error) {
+        document.getElementById("auditResult").textContent = `Review decision not saved: ${error.message}`;
+    }
+}
+
+function renderAlerts(alerts) {
+    const node = document.getElementById("alertList");
+    if (!alerts.length) {
+        node.innerHTML = `<div class="empty-state">No open restock reminders for the selected shelf.</div>`;
+        return;
+    }
+    node.innerHTML = alerts.map(alert => `<article class="alert-item ${escapeHtml(alert.severity || "")}">
+        <strong>${escapeHtml(alert.sku)}</strong> <small>row ${escapeHtml(alert.row)} · ${escapeHtml(alert.observed_facings)}/${escapeHtml(alert.minimum_facings)} minimum facings</small>
+        <div class="management-actions"><button class="compact-button" type="button" data-alert-action="acknowledge" data-alert-id="${escapeHtml(alert._id)}">Acknowledge</button><button class="compact-button success" type="button" data-alert-action="resolve" data-alert-id="${escapeHtml(alert._id)}">Resolve</button></div>
+    </article>`).join("");
+    node.querySelectorAll("[data-alert-action]").forEach(button => button.addEventListener("click", () =>
+        actOnAlert(button.dataset.alertId, button.dataset.alertAction)
+    ));
+}
+
+async function actOnAlert(alertId, action) {
+    try {
+        await apiRequest(`/alerts/${encodeURIComponent(alertId)}/action`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "X-User-Role": "auditor" },
+            body: JSON.stringify({ action, actor: currentContext().operator, note: `Action taken in dashboard: ${action}` })
+        });
+        await refreshOperations();
+        await refreshSystemStatus();
+    } catch (error) {
+        document.getElementById("auditResult").textContent = `Alert action not saved: ${error.message}`;
+    }
+}
+
+function renderHistory(audits) {
+    const node = document.getElementById("historyList");
+    if (!audits.length) {
+        node.innerHTML = `<div class="empty-state">No saved audits for this shelf yet.</div>`;
+        return;
+    }
+    node.innerHTML = audits.map(audit => `<article class="history-item"><span><strong>${escapeHtml(audit.store_id)} / ${escapeHtml(audit.shelf_id)}</strong><br><small>${new Date(audit.created_at).toLocaleString()} · ${escapeHtml(audit.status)} · ${escapeHtml(audit.analysis?.detection_count || 0)} boxes</small></span><span><button type="button" class="compact-button" data-audit-id="${escapeHtml(audit._id)}">Open</button> ${audit.artifacts?.report_url ? `<a class="compact-button" href="${escapeHtml(audit.artifacts.report_url)}" target="_blank">Report</a>` : ""}</span></article>`).join("");
+    node.querySelectorAll("[data-audit-id]").forEach(button => button.addEventListener("click", () => openAudit(button.dataset.auditId)));
+}
+
+function setCurrentAudit(audit, message) {
+    currentAudit = audit;
+    if (audit.annotated_image_url) {
+        auditVisualMeta.textContent = `${audit.analysis.detection_count} boxes across ${audit.analysis.row_count} shelf rows · ${audit.timings_ms?.total || audit.timings_ms?.inference || "–"} ms`;
+        annotatedShelfImage.src = `${audit.annotated_image_url}?audit=${encodeURIComponent(audit._id)}`;
+        auditVisual.hidden = false;
+    }
+    if (message) resultNode.textContent = message;
+    renderReviewQueue(audit);
+}
+
+async function openAudit(auditId) {
+    try {
+        const audit = await apiRequest(`/audits/${encodeURIComponent(auditId)}`);
+        setCurrentAudit(audit, `Opened saved audit. ${audit.artifacts?.report_url ? "Use its Report link for a printable evidence record." : ""}`);
+        document.getElementById("operationsDrawer").open = true;
+    } catch (error) {
+        resultNode.textContent = `Could not open saved audit: ${error.message}`;
+    }
+}
+
+async function refreshOperations() {
+    try {
+        const context = currentContext();
+        const query = context.store_id && context.shelf_id ? `&store_id=${encodeURIComponent(context.store_id)}&shelf_id=${encodeURIComponent(context.shelf_id)}` : "";
+        const [alerts, audits] = await Promise.all([
+            apiRequest("/alerts?status=open"),
+            apiRequest(`/audits?limit=6${query}`)
+        ]);
+        renderAlerts(alerts.filter(alert => !context.store_id || (alert.store_id === context.store_id && alert.shelf_id === context.shelf_id)));
+        renderHistory(audits);
+    } catch (error) {
+        document.getElementById("alertList").innerHTML = `<div class="empty-state">Could not load operations: ${escapeHtml(error.message)}</div>`;
+    }
+}
+
+function setSelectedImage(image, label) {
+    capturedImage = image;
+    fileNameNode.textContent = label;
+    auditButton.disabled = false;
+}
+
+function stopCamera() {
+    if (cameraStream) {
+        cameraStream.getTracks().forEach(track => track.stop());
+        cameraStream = null;
+    }
+    cameraPreview.srcObject = null;
+    cameraPanel.hidden = true;
+}
+
+fileInput.addEventListener("change", () => {
+    const selected = fileInput.files[0];
+    if (selected) setSelectedImage(selected, selected.name);
+});
+
+document.getElementById("openCamera").addEventListener("click", async () => {
+    if (!navigator.mediaDevices?.getUserMedia) {
+        resultNode.textContent = "Camera access is not supported in this browser. Please upload a shelf photo instead.";
+        return;
+    }
+    try {
+        cameraStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: "environment" } }, audio: false });
+        cameraPreview.srcObject = cameraStream;
+        cameraPanel.hidden = false;
+        resultNode.textContent = "Position the shelf clearly in the camera frame, then choose ‘Use this photo’.";
+    } catch (error) {
+        resultNode.textContent = "Camera access was not granted. Please upload a shelf photo instead.";
+    }
+});
+
+document.getElementById("closeCamera").addEventListener("click", stopCamera);
+
+document.getElementById("captureCamera").addEventListener("click", () => {
+    if (!cameraPreview.videoWidth) {
+        resultNode.textContent = "Camera is still starting. Please wait a moment and try again.";
+        return;
+    }
+    const canvas = document.createElement("canvas");
+    canvas.width = cameraPreview.videoWidth;
+    canvas.height = cameraPreview.videoHeight;
+    canvas.getContext("2d").drawImage(cameraPreview, 0, 0);
+    canvas.toBlob(blob => {
+        if (!blob) {
+            resultNode.textContent = "Could not capture the photo. Please try again or upload an image.";
+            return;
+        }
+        setSelectedImage(new File([blob], "live-shelf-capture.jpg", { type: "image/jpeg" }), "Live camera photo ready");
+        stopCamera();
+        resultNode.textContent = "Photo ready. Select ‘Analyse shelf’ when you are ready.";
+    }, "image/jpeg", 0.92);
+});
+
+document.getElementById("auditForm").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const image = capturedImage || fileInput.files[0];
+    if (!image) {
+        resultNode.textContent = "Please choose or capture a shelf photo first.";
+        return;
+    }
+    const form = new FormData();
+    form.append("image", image);
+    form.append("store_id", document.getElementById("storeId").value.trim());
+    form.append("shelf_id", document.getElementById("shelfId").value.trim());
+    form.append("operator", document.getElementById("operator").value.trim());
+    resultNode.textContent = "Running detection, OCR and planogram analysis…";
+    auditButton.disabled = true;
+    try {
+        const audit = await apiRequest("/audits", { method: "POST", body: form, headers: { "X-User-Role": "auditor" } });
+        const analysis = audit.analysis;
+        setCurrentAudit(audit, analysis.restock_candidates.length
+            ? `${analysis.restock_candidates.length} restock reminder(s) found. See the highlighted shelf image below.`
+            : "Analysis complete. See the highlighted shelf image below.");
+        if (audit.annotated_image_url) {
+            annotatedShelfImage.onload = () => auditVisual.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }
+        await refreshSystemStatus();
+        await refreshOperations();
+    } catch (error) {
+        resultNode.textContent = `Audit not run: ${error.message}`;
+    } finally {
+        auditButton.disabled = false;
+    }
+});
+
+document.getElementById("addProductButton").addEventListener("click", addCatalogueProduct);
+document.getElementById("addSlotButton").addEventListener("click", addPlanogramSlot);
+document.getElementById("loadPlanogramButton").addEventListener("click", loadPlanogram);
+document.getElementById("savePlanogramButton").addEventListener("click", savePlanogram);
+["storeId", "shelfId"].forEach(id => document.getElementById(id).addEventListener("change", refreshOperations));
+
+Promise.all([refreshSystemStatus(), loadCatalogue(), refreshOperations()]).catch(() => {});
+</script>
+
+
+
+</body></html>

@@ -1,0 +1,9 @@
+# Use this only after preparing a local copy of SKU-110K.
+# The dataset is single-class: `object`, not 110,000 classifier labels.
+path: ../../data/SKU-110K
+train: train.txt
+val: val.txt
+test: test.txt
+names:
+  0: object
+

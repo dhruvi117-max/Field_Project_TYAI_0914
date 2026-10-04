@@ -1,0 +1,22 @@
+# Python and test output
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+
+# Secrets and runtime data
+backend/.env
+data/uploads/*
+!data/uploads/.gitkeep
+data/audit_artifacts/*
+!data/audit_artifacts/.gitkeep
+models/*.pt
+models/*.onnx
+
+# Large datasets and reproducible training output
+data/SKU-110K/
+datasets/
+weights/
+yolo*.pt
+runs/
+mlruns/
