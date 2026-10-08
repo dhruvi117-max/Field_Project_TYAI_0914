@@ -7,7 +7,9 @@ from pydantic import BaseModel, Field, HttpUrl
 
 
 class ProductIn(BaseModel):
-    sku: str = Field(min_length=1, max_length=80, examples=["COLA-500-ML"])
+    # The UI deliberately hides this technical key.  The API accepts it for
+    # backwards compatibility, but generates one from the product name when absent.
+    sku: str | None = Field(default=None, min_length=1, max_length=80, examples=["COLA-500-ML"])
     name: str = Field(min_length=1, max_length=120, examples=["Cola 500 ml"])
     ocr_aliases: list[str] = Field(default_factory=list, description="Words likely to appear on packaging")
     image_url: HttpUrl | None = None
@@ -15,10 +17,12 @@ class ProductIn(BaseModel):
 
 class PlanogramSlot(BaseModel):
     row: int = Field(ge=1, le=30)
-    sku: str
+    # Product name is what a store user sees. sku remains an internal stable key
+    # so old planograms and audit evidence continue to work.
+    product_name: str | None = Field(default=None, min_length=1, max_length=120)
+    sku: str | None = Field(default=None, min_length=1, max_length=80)
     expected_facings: int = Field(ge=0, le=100)
     minimum_facings: int = Field(ge=0, le=100)
-    position_hint: str | None = Field(default=None, max_length=120)
 
 
 class PlanogramIn(BaseModel):
@@ -47,4 +51,3 @@ class HealthOut(BaseModel):
     database: Literal["connected", "disconnected"]
     model_ready: bool
     timestamp: datetime
-

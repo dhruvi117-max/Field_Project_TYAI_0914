@@ -17,9 +17,9 @@ def test_planogram_creates_restock_alert_for_empty_required_slot() -> None:
     result = analyse_planogram([detection("one", 10, "A")], planogram, [], 600, 0.35)
     assert result["row_count"] == 1
     assert result["restock_candidates"] == [{
-        "type": "restock", "row": 2, "sku": "B", "expected_facings": 1,
+        "type": "restock", "row": 2, "sku": "B", "product_name": "B", "expected_facings": 1,
         "minimum_facings": 1, "observed_facings": 0, "shortfall": 1,
-        "needs_restock": True, "position_hint": None, "severity": "critical",
+        "needs_restock": True, "severity": "critical",
     }]
 
 
@@ -28,17 +28,16 @@ def test_unresolved_detection_requires_human_review() -> None:
     result = analyse_planogram([detection("one", 10, None)], planogram, [], 600, 0.35)
     assert result["review_required"] is True
     assert result["unresolved_detection_count"] == 1
+    assert result["restock_candidates"] == []
+    assert result["restock_blocked_by_review"] is True
 
 
-def test_position_hint_creates_explainable_position_deviation() -> None:
-    planogram = {
-        "slots": [{"row": 1, "sku": "A", "expected_facings": 1, "minimum_facings": 0, "position_hint": "right"}]
-    }
-    result = analyse_planogram([detection("one", 10, "A")], planogram, [], 600, 0.35, image_width=900)
-    assert result["mismatches"] == [{
-        "type": "position_deviation", "row": 1, "sku": "A", "detection_id": "one",
-        "expected_position": "right", "observed_position": "left", "needs_restock": False,
-    }]
+def test_restock_is_deferred_until_human_review_is_complete() -> None:
+    planogram = {"slots": [{"row": 1, "sku": "A", "expected_facings": 2, "minimum_facings": 1}]}
+    result = analyse_planogram([detection("one", 10, None)], planogram, [], 600, 0.35)
+    assert result["restock_ready"] is False
+    assert result["restock_candidates"] == []
+    assert len(result["pending_restock_candidates"]) == 1
 
 
 def test_excluded_detection_does_not_create_a_false_facing_count() -> None:

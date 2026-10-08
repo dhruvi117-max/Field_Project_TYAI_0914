@@ -76,11 +76,22 @@ class ShelfInferenceEngine:
                 import easyocr
 
                 self._ocr_reader = easyocr.Reader(["en"], gpu=False, verbose=False)
-            results = self._ocr_reader.readtext(crop, detail=1, paragraph=True)
+            # paragraph=True can return strings rather than (box, text, score)
+            # tuples in some EasyOCR versions. Keep individual results so the
+            # confidence-aware catalogue matching has a stable contract.
+            results = self._ocr_reader.readtext(crop, detail=1, paragraph=False)
             if not results:
                 return None, None
-            text, confidence = results[0][1], float(results[0][2])
-            return text.strip() or None, round(confidence, 3)
+            readable = [
+                (str(result[1]).strip(), float(result[2]))
+                for result in results
+                if isinstance(result, (list, tuple)) and len(result) >= 3 and str(result[1]).strip()
+            ]
+            if not readable:
+                return None, None
+            text = " ".join(value for value, _ in readable[:4])
+            confidence = max(score for _, score in readable)
+            return text or None, round(confidence, 3)
         except Exception as error:  # OCR must not prevent a completed object-detection audit.
             LOGGER.warning("OCR failed for one crop: %s", error)
             return None, None
@@ -163,4 +174,3 @@ class ShelfInferenceEngine:
 
 
 inference_engine = ShelfInferenceEngine()
-

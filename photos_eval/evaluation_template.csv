@@ -1,0 +1,4 @@
+photo_name,test_case,actual_total_facings,actual_product_counts,expected_planogram,detected_boxes_after_review,confirmed_product_counts,restock_products_expected,restock_products_predicted,count_error,notes
+example_normal.jpg,normal_front,,,,,,,,,
+example_angle.jpg,angled_view,,,,,,,,,
+example_low_light.jpg,low_light,,,,,,,,,

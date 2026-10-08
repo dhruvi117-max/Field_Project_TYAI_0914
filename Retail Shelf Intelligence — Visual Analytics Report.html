@@ -409,7 +409,20 @@
         .legend-high { background: var(--accent-emerald); }
         .legend-medium { background: var(--accent-amber); }
         .legend-low { background: var(--accent-rose); }
-        .restock-toast { display: none; margin: 0 0 22px; border: 1px solid rgba(255, 145, 184, .60); background: rgba(116, 39, 77, .34); color: #ffd5e3; border-radius: 12px; padding: 14px 16px; box-shadow: 0 10px 24px rgba(29, 4, 17, .22); }
+          .restock-toast { display: none; margin: 0 0 22px; border: 1px solid rgba(255, 145, 184, .60); background: rgba(116, 39, 77, .34); color: #ffd5e3; border-radius: 12px; padding: 14px 16px; box-shadow: 0 10px 24px rgba(29, 4, 17, .22); }
+          .audit-evidence { margin-top: 12px; padding: 11px 13px; border-radius: 10px; border: 1px solid rgba(135, 235, 215, .20); background: rgba(12, 40, 43, .28); color: var(--text-muted); font-size: .8rem; }
+          .audit-evidence a { margin-left: 8px; text-decoration: none; }
+          .report-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+          .report-grid .operation-card { min-height: 0; }
+          .pipeline-flow { display: flex; align-items: stretch; flex-wrap: wrap; gap: 7px; margin-top: 12px; }
+          .pipeline-step { flex: 1 1 118px; padding: 10px; border: 1px solid rgba(135, 235, 215, .20); border-radius: 9px; background: rgba(11, 43, 47, .28); color: #f6f2ff; font-size: .76rem; font-weight: 700; text-align: center; }
+          .pipeline-step small { display: block; margin-top: 4px; color: var(--text-muted); font-weight: 400; line-height: 1.35; }
+          .info-list { display: grid; gap: 7px; margin: 0; padding: 0; list-style: none; color: var(--text-muted); font-size: .8rem; line-height: 1.45; }
+          .info-list strong { color: #fff; }
+          .metric-list { display: grid; gap: 7px; margin-top: 10px; }
+          .metric-line { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,.07); color: var(--text-muted); font-size: .8rem; }
+          .metric-line b { color: var(--accent-cyan); white-space: nowrap; }
+          @media (max-width: 700px) { .report-grid { grid-template-columns: 1fr; } }
         .analytics-drawer { margin-top: 22px; border: 1px solid rgba(195, 166, 255, .18); border-radius: 14px; background: rgba(19, 14, 36, .38); overflow: hidden; }
         .analytics-drawer > summary { cursor: pointer; padding: 15px 18px; color: var(--text-muted); font-size: .9rem; list-style: none; }
         .analytics-drawer > summary::-webkit-details-marker { display: none; }
@@ -422,8 +435,9 @@
         .operations-drawer > summary::after { content: '⌄'; float: right; color: var(--accent-cyan); font-size: 1.1rem; }
         .operations-content { padding: 0 18px 20px; }
         .operations-intro { color: var(--text-muted); margin: 0 0 16px; font-size: .87rem; }
-        .operations-grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(300px, .85fr); gap: 14px; }
-        .operation-card { border: 1px solid rgba(195, 166, 255, .18); border-radius: 13px; padding: 15px; background: rgba(5, 5, 16, .30); }
+          .operations-grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(300px, .85fr); gap: 14px; }
+          .operations-grid.single { grid-template-columns: minmax(0, 1fr); }
+          .operation-card { border: 1px solid rgba(195, 166, 255, .18); border-radius: 13px; padding: 15px; background: rgba(5, 5, 16, .30); }
         .operation-card h3 { margin: 0 0 5px; color: #fff; font-size: 1rem; }
         .operation-card p { margin: 0 0 13px; color: var(--text-muted); font-size: .8rem; line-height: 1.45; }
         .management-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 9px 0; }
@@ -446,8 +460,19 @@
         .review-crop { width: 78px; height: 78px; object-fit: cover; border-radius: 7px; background: #0b0a16; }
         .review-controls { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 6px; margin-top: 7px; }
         .review-controls select, .review-controls input { min-width: 0; border-radius: 7px; border: 1px solid rgba(195,166,255,.23); background: rgba(6,5,17,.55); color: #fff; padding: 6px; font: inherit; font-size: .72rem; }
-        .history-item { display: flex; align-items: center; justify-content: space-between; gap: 9px; }
-        .empty-state { color: var(--text-muted); font-size: .78rem; padding: 8px 0; }
+          .history-item { display: flex; align-items: center; justify-content: space-between; gap: 9px; }
+          .empty-state { color: var(--text-muted); font-size: .78rem; padding: 8px 0; }
+          .audit-workflow { display: grid; gap: 14px; margin-top: 18px; }
+          .audit-workflow[hidden] { display: none; }
+          .audit-table-wrap { overflow-x: auto; border: 1px solid rgba(195, 166, 255, .16); border-radius: 10px; background: rgba(4, 4, 14, .30); }
+          .audit-table { width: 100%; min-width: 650px; border-collapse: collapse; font-size: .8rem; }
+          .audit-table th { padding: 10px 12px; text-align: left; color: #f6f2ff; font-size: .72rem; letter-spacing: .03em; text-transform: uppercase; background: rgba(128, 91, 188, .20); }
+          .audit-table td { padding: 10px 12px; color: var(--text-muted); border-top: 1px solid rgba(255,255,255,.07); vertical-align: top; }
+          .audit-table td strong { color: #fff; }
+          .audit-table .facing-ok { color: var(--accent-emerald); font-weight: 700; }
+          .audit-table .facing-warning { color: var(--accent-amber); font-weight: 700; }
+          .audit-table .facing-critical { color: #ffb3cc; font-weight: 700; }
+          .audit-table .muted { color: var(--text-muted); }
         @media (max-width: 800px) { body { padding: 14px; } header, .live-console { padding: 21px; } .capture-heading { display: block; } .api-status { display: inline-block; margin-top: 12px; } .capture-grid, .context-grid, .operations-grid, .management-row, .management-row.four { grid-template-columns: 1fr; } .capture-submit { align-items: flex-start; flex-direction: column; } .analytics-content { padding: 0 12px 16px; } .review-controls { grid-template-columns: 1fr 1fr; } }
     </style>
 </head>
@@ -459,7 +484,7 @@
     <header>
         <div class="eyebrow">Shelf audit workspace</div>
         <div class="title">Retail Shelf Intelligence</div>
-        <div class="subtitle">Detect · review · restock</div>
+        <div class="subtitle">Detect · Review · Restock</div>
         <p class="hero-copy">Start with one clear shelf image. The system counts product facings, reads available label text, compares the shelf against its planogram and flags only the items that need attention.</p>
     </header>
 
@@ -490,8 +515,8 @@
             </div>
             <div class="guided-steps" aria-label="Audit steps">
                 <span class="guided-step"><b>1</b> Choose a photo</span>
-                <span class="guided-step"><b>2</b> AI analyses the shelf</span>
-                <span class="guided-step"><b>3</b> Review any alerts</span>
+                <span class="guided-step"><b>2</b> Check uncertain product names</span>
+                <span class="guided-step"><b>3</b> See confirmed restock reminders</span>
             </div>
             <div id="cameraPanel" class="camera-panel" hidden>
                 <video id="cameraPreview" autoplay playsinline muted></video>
@@ -509,7 +534,7 @@
                 </div>
             </details>
             <div class="capture-submit">
-                <small>For a first-time setup, add your product catalogue and planogram in <a href="/docs" target="_blank" style="color:var(--accent-cyan)">API Docs</a>. Low-confidence results are held for human review.</small>
+                <small>First-time setup: open the workspace below, add product names and save a planogram. Uncertain product names are held for human review.</small>
                 <button id="runAudit" class="live-button" type="submit" disabled>Analyse shelf</button>
             </div>
         </form>
@@ -525,33 +550,58 @@
                 <span><i class="legend-dot legend-medium"></i>Medium confidence</span>
                 <span><i class="legend-dot legend-low"></i>Low confidence / review</span>
             </div>
+            <div id="auditEvidenceActions" class="audit-evidence" hidden>
+                Audit evidence is shown below on this page and is also saved securely with the original photo, boxed result and review decisions.
+                <button id="openAuditEvidence" class="compact-button" type="button">View audit evidence below</button>
+            </div>
+        </section>
+    </section>
+
+    <section id="auditWorkflow" class="audit-workflow" hidden aria-live="polite">
+        <section class="operation-card" aria-labelledby="detectedProductsTitle">
+            <h3 id="detectedProductsTitle">Detected Products</h3>
+            <p>Every product-facing box found in the uploaded image. This table updates after each human confirmation.</p>
+            <div id="detectedProductsList" class="audit-table-wrap"><div class="empty-state">Run an audit to view detected products.</div></div>
+        </section>
+        <section class="operation-card" aria-labelledby="reviewTitle">
+            <h3 id="reviewTitle">Human Review</h3>
+            <p>Only confirm a product name when you are sure. Confirmed products are remembered as visual examples for future shelf photos.</p>
+            <div id="reviewList" class="review-list"><div class="empty-state">Run an audit to review uncertain detections.</div></div>
+        </section>
+        <section id="auditEvidencePanel" class="operation-card" aria-labelledby="auditEvidenceTitle">
+            <h3 id="auditEvidenceTitle">Audit Evidence</h3>
+            <p id="auditEvidenceSummary">Planogram findings will appear here after the photo is analysed.</p>
+            <div id="auditEvidenceTable" class="audit-table-wrap"><div class="empty-state">No audit evidence is available yet.</div></div>
+        </section>
+        <section class="operation-card" aria-labelledby="alertTitle">
+            <h3 id="alertTitle">Restock Reminders</h3>
+            <p>Restock reminders are calculated only after all uncertain products have been reviewed.</p>
+            <div id="alertList" class="alert-list"><div class="empty-state">No open restock reminders for the selected shelf.</div></div>
         </section>
     </section>
 
     <details id="operationsDrawer" class="operations-drawer">
-        <summary>Planogram, alerts and human review workspace</summary>
+        <summary>Set up product catalogue and planogram</summary>
         <div class="operations-content">
-            <p class="operations-intro">Set the shelf reference once, then use this same drawer to resolve uncertain AI results and close restock reminders. Changes are recorded in MongoDB as audit evidence.</p>
-            <div class="operations-grid">
+            <p class="operations-intro">Before auditing a new shelf, add the product names and define the expected and minimum number of facings for each row.</p>
+            <div class="operations-grid single">
                 <section class="operation-card" aria-labelledby="planogramTitle">
                     <h3 id="planogramTitle">Planogram designer</h3>
                     <p>First add products to the local catalogue. Then define the expected and minimum number of facings for each shelf row.</p>
                     <div class="management-row">
-                        <div><label for="productSku">SKU</label><input id="productSku" placeholder="COLA-500"></div>
                         <div><label for="productName">Product name</label><input id="productName" placeholder="Cola 500 ml"></div>
-                        <div><label for="productAliases">OCR aliases</label><input id="productAliases" placeholder="cola, 500ml"></div>
+                        <div><label for="productAliases">OCR words (optional)</label><input id="productAliases" placeholder="cola, zero sugar"></div>
                     </div>
                     <div class="management-actions"><button id="addProductButton" class="compact-button" type="button">Add catalogue product</button></div>
                     <hr style="border:0;border-top:1px solid rgba(255,255,255,.09);margin:14px 0">
                     <div class="management-row">
                         <div><label for="planogramName">Planogram name</label><input id="planogramName" value="Demo aisle planogram"></div>
                         <div><label for="planogramRow">Shelf row</label><input id="planogramRow" type="number" min="1" value="1"></div>
-                        <div><label for="planogramSku">Product SKU</label><select id="planogramSku"><option value="">Add a catalogue product first</option></select></div>
+                        <div><label for="planogramSku">Product name</label><select id="planogramSku"><option value="">Add a catalogue product first</option></select></div>
                     </div>
-                    <div class="management-row four">
+                    <div class="management-row">
                         <div><label for="planogramExpected">Expected facings</label><input id="planogramExpected" type="number" min="0" value="3"></div>
                         <div><label for="planogramMinimum">Minimum before restock</label><input id="planogramMinimum" type="number" min="0" value="1"></div>
-                        <div><label for="planogramPosition">Position</label><select id="planogramPosition"><option value="">Any</option><option>left</option><option>centre</option><option>right</option></select></div>
                         <div style="display:flex;align-items:end"><button id="addSlotButton" class="compact-button" type="button">Add slot</button></div>
                     </div>
                     <div id="planogramSlots" class="slot-list"><div class="empty-state">No planogram slots yet.</div></div>
@@ -561,29 +611,76 @@
                     </div>
                     <div id="planogramStatus" class="management-status"></div>
                 </section>
-                <div style="display:grid;gap:14px">
-                    <section class="operation-card" aria-labelledby="alertTitle">
-                        <h3 id="alertTitle">Restock reminders</h3>
-                        <p>Only confirmed below-minimum facings create alerts. Resolving an alert is an auditable action.</p>
-                        <div id="alertList" class="alert-list"><div class="empty-state">Loading alerts…</div></div>
-                    </section>
-                    <section class="operation-card" aria-labelledby="historyTitle">
-                        <h3 id="historyTitle">Recent audit evidence</h3>
-                        <p>Open a saved audit to view its boxed image, product crops and evidence report.</p>
-                        <div id="historyList" class="history-list"><div class="empty-state">No audits loaded yet.</div></div>
-                    </section>
-                </div>
             </div>
-            <section class="operation-card" style="margin-top:14px" aria-labelledby="reviewTitle">
-                <h3 id="reviewTitle">Human review queue</h3>
-                <p>Use this only when the AI cannot safely map packaging text to your catalogue. Correcting or removing a detection recalculates planogram results and leaves an event trail.</p>
-                <div id="reviewList" class="review-list"><div class="empty-state">Run or open an audit to review uncertain detections.</div></div>
-            </section>
         </div>
     </details>
 
     <details class="analytics-drawer">
-        <summary>Open previous detailed analytics report</summary>
+        <summary>Additional Information</summary>
+        <div class="analytics-content">
+            <section class="operation-card" style="margin-top:18px">
+                <h3>Project workflow</h3>
+                <p>Each stage is kept explainable so an auditor can understand how a shelf photo becomes a restock decision.</p>
+                <div class="pipeline-flow" aria-label="Retail shelf intelligence pipeline">
+                    <div class="pipeline-step">1. Capture<small>Upload or take a shelf photo</small></div>
+                    <div class="pipeline-step">2. Detect<small>YOLO finds product facings and confidence scores</small></div>
+                    <div class="pipeline-step">3. Identify<small>OCR and catalogue suggest a product name</small></div>
+                    <div class="pipeline-step">4. Review<small>A person confirms uncertain identities</small></div>
+                    <div class="pipeline-step">5. Compare<small>Planogram checks rows, facings and exceptions</small></div>
+                    <div class="pipeline-step">6. Act<small>Confirmed low stock creates a restock reminder</small></div>
+                </div>
+            </section>
+            <div class="report-grid">
+                <section class="operation-card">
+                    <h3>SKU-110K training details</h3>
+                    <ul class="info-list">
+                        <li><strong>Dataset:</strong> SKU-110K retail shelf images, using the provided train, validation and untouched test split.</li>
+                        <li><strong>Model:</strong> pretrained YOLO11n, a lightweight object-detection model.</li>
+                        <li><strong>Training:</strong> fine-tuned for 20 epochs at 640 px on an NVIDIA RTX 3050 Laptop GPU.</li>
+                        <li><strong>Output:</strong> generic product-facing boxes and confidence scores. Brand identity is handled separately by OCR, catalogue matching and review.</li>
+                    </ul>
+                </section>
+                <section class="operation-card">
+                    <h3>Detector evaluation</h3>
+                    <p>Object detection is evaluated with precision, recall and mean Average Precision (mAP), rather than a single classification-accuracy value.</p>
+                    <div class="metric-list">
+                        <div class="metric-line"><span>Precision</span><b>0.8867</b></div>
+                        <div class="metric-line"><span>Recall</span><b>0.8192</b></div>
+                        <div class="metric-line"><span>mAP@0.50</span><b>0.8913</b></div>
+                        <div class="metric-line"><span>mAP@0.50:0.95</span><b>0.5346</b></div>
+                        <div class="metric-line"><span>Inference time</span><b>5.057 ms/image</b></div>
+                    </div>
+                </section>
+                <section class="operation-card">
+                    <h3>How the planogram works</h3>
+                    <ul class="info-list">
+                        <li><strong>1.</strong> Add a product name and optional OCR words to the catalogue.</li>
+                        <li><strong>2.</strong> Add a shelf row, product name, expected facings and minimum-before-restock value.</li>
+                        <li><strong>3.</strong> Save the planogram as the shelf reference.</li>
+                        <li><strong>4.</strong> After a photo audit, confirmed products are counted by row and compared with the reference.</li>
+                        <li><strong>5.</strong> Missing, low-stock and unexpected products appear in Audit Evidence; reminders wait until Human Review is complete.</li>
+                    </ul>
+                </section>
+                <section class="operation-card">
+                    <h3>Current planogram summary</h3>
+                    <p>This is the active reference for the selected store and shelf.</p>
+                    <div id="planogramEvaluation" class="slot-list"><div class="empty-state">Load or save a planogram to view its summary.</div></div>
+                </section>
+                <section class="operation-card">
+                    <h3>Overall system evaluation</h3>
+                    <ul class="info-list">
+                        <li><strong>Strength:</strong> the trained detector reliably identifies generic product facings on the SKU-110K test split.</li>
+                        <li><strong>Safety:</strong> unclear OCR never becomes an automatic stock decision; it is sent to Human Review.</li>
+                        <li><strong>Operational evidence:</strong> each audit keeps the source image, boxed image, decisions, timings and planogram findings.</li>
+                        <li><strong>Limitation:</strong> SKU-110K does not teach brand identities, so final identity accuracy depends on readable packaging, the product catalogue and reviewer confirmation.</li>
+                    </ul>
+                </section>
+            </div>
+        </div>
+    </details>
+
+    <details class="analytics-drawer" hidden aria-hidden="true">
+        <summary>Archived partner analytics</summary>
         <div class="analytics-content">
     <!-- SECTION 1: KEY METRICS -->
     <div class="section-title">Section 1 — Key Executive Metrics</div>
@@ -3232,41 +3329,136 @@ async function refreshSystemStatus() {
         const alerts = await apiRequest("/alerts?status=open");
         if (alerts.length) {
             toastNode.style.display = "block";
-            toastNode.textContent = `Restock reminder: ${alerts.length} active item${alerts.length === 1 ? "" : "s"}. ${alerts.slice(0, 2).map(a => `${a.sku} (row ${a.row}: ${a.observed_facings}/${a.minimum_facings})`).join("; ")}`;
+            toastNode.textContent = `Restock reminder: ${alerts.length} active item${alerts.length === 1 ? "" : "s"}. ${alerts.slice(0, 2).map(alert => `${productNameFromSku(alert.sku)} (row ${alert.row}: ${alert.observed_facings}/${alert.minimum_facings})`).join("; ")}`;
         }
     } catch (error) {
-        statusNode.textContent = "● Backend unavailable — start Docker or FastAPI";
+        statusNode.textContent = "● Backend unavailable — start the local FastAPI server";
         statusNode.style.color = "var(--accent-rose)";
     }
 }
 
-function renderCatalogueOptions() {
-    const select = document.getElementById("planogramSku");
-    const previous = select.value;
-    select.innerHTML = `<option value="">Select product SKU</option>${catalogueProducts.map(product =>
-        `<option value="${escapeHtml(product.sku)}">${escapeHtml(product.sku)} — ${escapeHtml(product.name)}</option>`
-    ).join("")}`;
-    select.value = previous;
-}
+  function renderCatalogueOptions() {
+      const select = document.getElementById("planogramSku");
+      const previous = select.value;
+      select.innerHTML = `<option value="">Select product name</option>${catalogueProducts.map(product =>
+          `<option value="${escapeHtml(product.sku)}">${escapeHtml(product.name)}</option>`
+      ).join("")}`;
+      select.value = previous;
+  }
 
-async function loadCatalogue() {
-    catalogueProducts = await apiRequest("/products");
-    renderCatalogueOptions();
-}
+  async function loadCatalogue() {
+      catalogueProducts = await apiRequest("/products");
+      renderCatalogueOptions();
+      renderPlanogramEvaluation();
+  }
 
-function renderPlanogramSlots() {
-    const node = document.getElementById("planogramSlots");
-    if (!planogramSlots.length) {
-        node.innerHTML = `<div class="empty-state">No planogram slots yet. Add one row/product requirement above.</div>`;
-        return;
-    }
-    node.innerHTML = planogramSlots.map((slot, index) =>
-        `<div class="slot-item"><span><strong>Row ${escapeHtml(slot.row)} · ${escapeHtml(slot.sku)}</strong><br>${escapeHtml(slot.expected_facings)} expected · ${escapeHtml(slot.minimum_facings)} minimum · ${escapeHtml(slot.position_hint || "any position")}</span><button class="compact-button danger" type="button" data-slot-index="${index}">Remove</button></div>`
-    ).join("");
+  function productNameFromSku(sku) {
+      return catalogueProducts.find(product => product.sku === sku)?.name || sku || "Unknown product";
+  }
+
+  function resolutionLabel(detection) {
+      if (detection.excluded) return "Removed by reviewer";
+      if (!detection.resolved_sku) return "Human review required";
+      const source = {
+          ocr_catalogue: "OCR and catalogue",
+          review_memory: "Visual memory",
+          human_confirmed: "Human confirmed"
+      }[detection.resolution_source] || "Confirmed";
+      return `${source} · ${productNameFromSku(detection.resolved_sku)}`;
+  }
+
+  function renderDetectedProducts(audit) {
+      const node = document.getElementById("detectedProductsList");
+      const detections = [...(audit?.detections || [])].sort((first, second) => (first.row || 99) - (second.row || 99));
+      if (!detections.length) {
+          node.innerHTML = `<div class="empty-state">No product facings were detected in this photo.</div>`;
+          return;
+      }
+      node.innerHTML = `<table class="audit-table"><thead><tr><th>Detected product</th><th>Row</th><th>Confidence</th><th>OCR text</th><th>Identification</th></tr></thead><tbody>${detections.map(item => {
+          const product = item.resolved_sku ? productNameFromSku(item.resolved_sku) : "Unconfirmed product";
+          const statusClass = item.resolved_sku ? "facing-ok" : item.excluded ? "muted" : "facing-warning";
+          return `<tr><td><strong>${escapeHtml(product)}</strong></td><td>${escapeHtml(item.row || "–")}</td><td>${Math.round((item.confidence || 0) * 100)}%</td><td>${escapeHtml(item.ocr_text || "No readable text")}</td><td class="${statusClass}">${escapeHtml(resolutionLabel(item))}</td></tr>`;
+      }).join("")}</tbody></table>`;
+  }
+
+  function renderAuditEvidence(audit) {
+      const table = document.getElementById("auditEvidenceTable");
+      const summary = document.getElementById("auditEvidenceSummary");
+      const analysis = audit?.analysis;
+      const slots = audit?.planogram_snapshot?.slots || [];
+      if (!analysis || !slots.length) {
+          summary.textContent = "No planogram evidence is available for this audit.";
+          table.innerHTML = `<div class="empty-state">No planogram findings are available yet.</div>`;
+          return;
+      }
+      const shortfalls = new Map((analysis.mismatches || [])
+          .filter(item => item.type === "restock" || item.type === "facing_shortfall")
+          .map(item => [`${item.row}:${item.sku}`, item]));
+      const unexpectedByRow = new Map();
+      (analysis.mismatches || []).filter(item => item.type === "unexpected_product").forEach(item => {
+          const values = unexpectedByRow.get(item.row) || [];
+          values.push(productNameFromSku(item.sku));
+          unexpectedByRow.set(item.row, values);
+      });
+      const handledUnexpectedRows = new Set();
+      const rows = slots.map(slot => {
+          const finding = shortfalls.get(`${slot.row}:${slot.sku}`);
+          let facings = `${slot.expected_facings}/${slot.expected_facings} · matches planogram`;
+          let facingClass = "facing-ok";
+          if (finding) {
+              const observed = finding.observed_facings;
+              if (observed === 0) {
+                  facings = `Missing (0/${finding.expected_facings}) · restock`;
+                  facingClass = "facing-critical";
+              } else if (finding.needs_restock) {
+                  facings = `Restock (${observed}/${finding.expected_facings})`;
+                  facingClass = "facing-critical";
+              } else {
+                  facings = `${observed}/${finding.expected_facings} · below expected`;
+                  facingClass = "facing-warning";
+              }
+          }
+          const unexpected = handledUnexpectedRows.has(slot.row) ? "—" : (unexpectedByRow.get(slot.row) || []).join(", ") || "—";
+          handledUnexpectedRows.add(slot.row);
+          return `<tr><td><strong>${escapeHtml(slot.product_name || productNameFromSku(slot.sku))}</strong></td><td>${escapeHtml(slot.row)}</td><td class="${facingClass}">${escapeHtml(facings)}</td><td>${escapeHtml(unexpected)}</td></tr>`;
+      });
+      unexpectedByRow.forEach((products, row) => {
+          if (!handledUnexpectedRows.has(row)) {
+              rows.push(`<tr><td class="muted">—</td><td>${escapeHtml(row)}</td><td class="muted">—</td><td>${escapeHtml(products.join(", "))}</td></tr>`);
+          }
+      });
+      summary.textContent = analysis.review_required
+          ? "Planogram findings are shown below. Complete Human Review before treating any missing or restock result as final."
+          : "Planogram findings are based on confirmed product identities for this shelf photo.";
+      table.innerHTML = `<table class="audit-table"><thead><tr><th>Product name</th><th>Row</th><th>Facings</th><th>Unexpected products</th></tr></thead><tbody>${rows.join("")}</tbody></table>`;
+  }
+
+  function renderPlanogramEvaluation() {
+      const node = document.getElementById("planogramEvaluation");
+      if (!node) return;
+      if (!planogramSlots.length) {
+          node.innerHTML = `<div class="empty-state">No reference planogram is saved for this shelf yet.</div>`;
+          return;
+      }
+      node.innerHTML = planogramSlots.map(slot => `<div class="slot-item"><span><strong>Row ${escapeHtml(slot.row)} · ${escapeHtml(slot.product_name || productNameFromSku(slot.sku))}</strong><br>${escapeHtml(slot.expected_facings)} expected · restock below ${escapeHtml(slot.minimum_facings)}</span></div>`).join("");
+  }
+
+  function renderPlanogramSlots() {
+      const node = document.getElementById("planogramSlots");
+      if (!planogramSlots.length) {
+          node.innerHTML = `<div class="empty-state">No planogram slots yet. Add one row/product requirement above.</div>`;
+          renderPlanogramEvaluation();
+          return;
+      }
+      node.innerHTML = planogramSlots.map((slot, index) =>
+          `<div class="slot-item"><span><strong>Row ${escapeHtml(slot.row)} · ${escapeHtml(slot.product_name || productNameFromSku(slot.sku))}</strong><br>${escapeHtml(slot.expected_facings)} expected · restock below ${escapeHtml(slot.minimum_facings)}</span><button class="compact-button danger" type="button" data-slot-index="${index}">Remove</button></div>`
+      ).join("");
     node.querySelectorAll("[data-slot-index]").forEach(button => button.addEventListener("click", () => {
-        planogramSlots.splice(Number(button.dataset.slotIndex), 1);
-        renderPlanogramSlots();
-    }));
+          planogramSlots.splice(Number(button.dataset.slotIndex), 1);
+          renderPlanogramSlots();
+          renderPlanogramEvaluation();
+      }));
+      renderPlanogramEvaluation();
 }
 
 async function loadPlanogram() {
@@ -3307,7 +3499,8 @@ async function savePlanogram() {
                 slots: planogramSlots
             })
         });
-        status.textContent = "Planogram saved. Your next audit will compare against these facings.";
+          status.textContent = "Planogram saved. Your next audit will compare against these facings.";
+          renderPlanogramEvaluation();
     } catch (error) {
         status.textContent = `Planogram not saved: ${error.message}`;
     }
@@ -3315,25 +3508,27 @@ async function savePlanogram() {
 
 async function addCatalogueProduct() {
     const status = document.getElementById("planogramStatus");
-    const sku = document.getElementById("productSku").value.trim();
-    const name = document.getElementById("productName").value.trim();
-    const aliases = document.getElementById("productAliases").value.split(",").map(value => value.trim()).filter(Boolean);
-    if (!sku || !name) {
-        status.textContent = "Enter both SKU and product name.";
-        return;
+      const name = document.getElementById("productName").value.trim();
+      const aliases = document.getElementById("productAliases").value.split(",").map(value => value.trim()).filter(Boolean);
+      if (!name) {
+          status.textContent = "Enter a product name.";
+          return;
     }
     try {
         await apiRequest("/products", {
             method: "POST",
             headers: { "Content-Type": "application/json", "X-User-Role": "auditor" },
-            body: JSON.stringify({ sku, name, ocr_aliases: aliases })
-        });
-        document.getElementById("productSku").value = "";
-        document.getElementById("productName").value = "";
-        document.getElementById("productAliases").value = "";
-        await loadCatalogue();
-        document.getElementById("planogramSku").value = sku;
-        status.textContent = `${sku} added to the catalogue.`;
+              body: JSON.stringify({ name, ocr_aliases: aliases })
+          });
+          const created = await apiRequest("/products");
+          document.getElementById("productName").value = "";
+          document.getElementById("productAliases").value = "";
+          catalogueProducts = created;
+          renderCatalogueOptions();
+          const selected = catalogueProducts.find(product => product.name.toLowerCase() === name.toLowerCase());
+          if (selected) document.getElementById("planogramSku").value = selected.sku;
+          renderPlanogramEvaluation();
+          status.textContent = `${name} added to the catalogue.`;
     } catch (error) {
         status.textContent = `Product not added: ${error.message}`;
     }
@@ -3345,38 +3540,38 @@ function addPlanogramSlot() {
     const sku = document.getElementById("planogramSku").value;
     const expected = Number(document.getElementById("planogramExpected").value);
     const minimum = Number(document.getElementById("planogramMinimum").value);
-    const position = document.getElementById("planogramPosition").value || null;
-    if (!Number.isInteger(row) || row < 1 || !sku || !Number.isInteger(expected) || !Number.isInteger(minimum) || minimum > expected) {
-        status.textContent = "Use a valid row/SKU; minimum facings cannot exceed expected facings.";
-        return;
-    }
-    planogramSlots.push({ row, sku, expected_facings: expected, minimum_facings: minimum, position_hint: position });
-    renderPlanogramSlots();
+      if (!Number.isInteger(row) || row < 1 || !sku || !Number.isInteger(expected) || !Number.isInteger(minimum) || minimum > expected) {
+          status.textContent = "Choose a product and valid row/counts; minimum cannot exceed expected facings.";
+          return;
+      }
+      const product = catalogueProducts.find(item => item.sku === sku);
+      planogramSlots.push({ row, product_name: product?.name || sku, expected_facings: expected, minimum_facings: minimum });
+      renderPlanogramSlots();
     status.textContent = "Slot added locally. Save planogram to make it active.";
 }
 
-function productOptions(selectedSku = "") {
-    return `<option value="">Select SKU</option>${catalogueProducts.map(product =>
-        `<option value="${escapeHtml(product.sku)}" ${product.sku === selectedSku ? "selected" : ""}>${escapeHtml(product.sku)} — ${escapeHtml(product.name)}</option>`
+  function productOptions(selectedSku = "") {
+      return `<option value="">Select product name</option>${catalogueProducts.map(product =>
+          `<option value="${escapeHtml(product.sku)}" ${product.sku === selectedSku ? "selected" : ""}>${escapeHtml(product.name)}</option>`
     ).join("")}`;
 }
 
 function renderReviewQueue(audit) {
     const node = document.getElementById("reviewList");
     if (!audit) {
-        node.innerHTML = `<div class="empty-state">Run or open an audit to review uncertain detections.</div>`;
+        node.innerHTML = `<div class="empty-state">Run an audit to review uncertain product names.</div>`;
         return;
     }
     const unresolved = (audit.detections || []).filter(item => !item.excluded && !item.resolved_sku);
     if (!unresolved.length) {
-        node.innerHTML = `<div class="empty-state">This audit has no unresolved detections. Its review decision is complete.</div>`;
+        node.innerHTML = `<div class="empty-state">No products need human review. This audit is ready for the final planogram result.</div>`;
         return;
     }
     node.innerHTML = unresolved.map(item => `<article class="review-item">
         ${item.crop_url ? `<img class="review-crop" src="${escapeHtml(item.crop_url)}" alt="Product crop for review">` : `<div class="review-crop"></div>`}
         <div><strong>Detection ${escapeHtml(item.detection_id.slice(0, 8))}</strong> <small>· row ${escapeHtml(item.row || "–")} · ${Math.round((item.confidence || 0) * 100)}% AI confidence</small>
         <br><small>OCR: ${escapeHtml(item.ocr_text || "No readable text")}</small>
-        <div class="review-controls"><select id="review-sku-${escapeHtml(item.detection_id)}">${productOptions()}</select><button class="compact-button success" type="button" data-review-action="correct" data-detection-id="${escapeHtml(item.detection_id)}">Apply SKU</button><button class="compact-button danger" type="button" data-review-action="remove" data-detection-id="${escapeHtml(item.detection_id)}">Remove</button></div></div>
+          <div class="review-controls"><select id="review-sku-${escapeHtml(item.detection_id)}">${productOptions()}</select><button class="compact-button success" type="button" data-review-action="correct" data-detection-id="${escapeHtml(item.detection_id)}">Confirm product</button><button class="compact-button danger" type="button" data-review-action="remove" data-detection-id="${escapeHtml(item.detection_id)}">Remove</button></div></div>
     </article>`).join("");
     node.querySelectorAll("[data-review-action]").forEach(button => button.addEventListener("click", () =>
         submitReview(button.dataset.detectionId, button.dataset.reviewAction)
@@ -3388,7 +3583,7 @@ async function submitReview(detectionId, action) {
     const context = currentContext();
     const sku = document.getElementById(`review-sku-${detectionId}`).value;
     if (action === "correct" && !sku) {
-        document.getElementById("auditResult").textContent = "Choose a catalogue SKU before applying a human correction.";
+          document.getElementById("auditResult").textContent = "Choose a product name before confirming this detection.";
         return;
     }
     try {
@@ -3403,7 +3598,13 @@ async function submitReview(detectionId, action) {
                 reason: action === "remove" ? "Not a valid product facing" : "Auditor confirmed product identity"
             })
         });
-        setCurrentAudit(audit, "Human decision saved. Planogram and alerts were recalculated.");
+          const remaining = audit.analysis.unresolved_detection_count || 0;
+          const message = remaining
+              ? `Product confirmation saved. ${remaining} item(s) still need review before restock can be decided.`
+              : audit.analysis.restock_candidates.length
+                  ? `Review complete. ${audit.analysis.restock_candidates.length} confirmed restock reminder(s) are now shown.`
+                  : "Review complete. No confirmed restock reminder is needed for this audit.";
+          setCurrentAudit(audit, message);
         await refreshOperations();
     } catch (error) {
         document.getElementById("auditResult").textContent = `Review decision not saved: ${error.message}`;
@@ -3417,7 +3618,7 @@ function renderAlerts(alerts) {
         return;
     }
     node.innerHTML = alerts.map(alert => `<article class="alert-item ${escapeHtml(alert.severity || "")}">
-        <strong>${escapeHtml(alert.sku)}</strong> <small>row ${escapeHtml(alert.row)} · ${escapeHtml(alert.observed_facings)}/${escapeHtml(alert.minimum_facings)} minimum facings</small>
+        <strong>${escapeHtml(alert.product_name || productNameFromSku(alert.sku))}</strong> <small>row ${escapeHtml(alert.row)} · ${escapeHtml(alert.observed_facings)}/${escapeHtml(alert.minimum_facings)} minimum facings</small>
         <div class="management-actions"><button class="compact-button" type="button" data-alert-action="acknowledge" data-alert-id="${escapeHtml(alert._id)}">Acknowledge</button><button class="compact-button success" type="button" data-alert-action="resolve" data-alert-id="${escapeHtml(alert._id)}">Resolve</button></div>
     </article>`).join("");
     node.querySelectorAll("[data-alert-action]").forEach(button => button.addEventListener("click", () =>
@@ -3439,32 +3640,27 @@ async function actOnAlert(alertId, action) {
     }
 }
 
-function renderHistory(audits) {
-    const node = document.getElementById("historyList");
-    if (!audits.length) {
-        node.innerHTML = `<div class="empty-state">No saved audits for this shelf yet.</div>`;
-        return;
-    }
-    node.innerHTML = audits.map(audit => `<article class="history-item"><span><strong>${escapeHtml(audit.store_id)} / ${escapeHtml(audit.shelf_id)}</strong><br><small>${new Date(audit.created_at).toLocaleString()} · ${escapeHtml(audit.status)} · ${escapeHtml(audit.analysis?.detection_count || 0)} boxes</small></span><span><button type="button" class="compact-button" data-audit-id="${escapeHtml(audit._id)}">Open</button> ${audit.artifacts?.report_url ? `<a class="compact-button" href="${escapeHtml(audit.artifacts.report_url)}" target="_blank">Report</a>` : ""}</span></article>`).join("");
-    node.querySelectorAll("[data-audit-id]").forEach(button => button.addEventListener("click", () => openAudit(button.dataset.auditId)));
-}
-
-function setCurrentAudit(audit, message) {
-    currentAudit = audit;
-    if (audit.annotated_image_url) {
+  function setCurrentAudit(audit, message) {
+      currentAudit = audit;
+      if (audit.annotated_image_url) {
         auditVisualMeta.textContent = `${audit.analysis.detection_count} boxes across ${audit.analysis.row_count} shelf rows · ${audit.timings_ms?.total || audit.timings_ms?.inference || "–"} ms`;
         annotatedShelfImage.src = `${audit.annotated_image_url}?audit=${encodeURIComponent(audit._id)}`;
-        auditVisual.hidden = false;
-    }
-    if (message) resultNode.textContent = message;
-    renderReviewQueue(audit);
-}
+          auditVisual.hidden = false;
+      }
+      const evidence = document.getElementById("auditEvidenceActions");
+      evidence.hidden = !audit.artifacts?.report_url;
+      if (message) resultNode.textContent = message;
+      document.getElementById("auditWorkflow").hidden = false;
+      renderDetectedProducts(audit);
+      renderReviewQueue(audit);
+      renderAuditEvidence(audit);
+      renderPlanogramEvaluation();
+  }
 
 async function openAudit(auditId) {
     try {
         const audit = await apiRequest(`/audits/${encodeURIComponent(auditId)}`);
-        setCurrentAudit(audit, `Opened saved audit. ${audit.artifacts?.report_url ? "Use its Report link for a printable evidence record." : ""}`);
-        document.getElementById("operationsDrawer").open = true;
+        setCurrentAudit(audit, "Opened saved audit. Its detected products, review decisions and planogram evidence are shown below the shelf image.");
     } catch (error) {
         resultNode.textContent = `Could not open saved audit: ${error.message}`;
     }
@@ -3473,13 +3669,8 @@ async function openAudit(auditId) {
 async function refreshOperations() {
     try {
         const context = currentContext();
-        const query = context.store_id && context.shelf_id ? `&store_id=${encodeURIComponent(context.store_id)}&shelf_id=${encodeURIComponent(context.shelf_id)}` : "";
-        const [alerts, audits] = await Promise.all([
-            apiRequest("/alerts?status=open"),
-            apiRequest(`/audits?limit=6${query}`)
-        ]);
-        renderAlerts(alerts.filter(alert => !context.store_id || (alert.store_id === context.store_id && alert.shelf_id === context.shelf_id)));
-        renderHistory(audits);
+          const alerts = await apiRequest("/alerts?status=open");
+          renderAlerts(alerts.filter(alert => !context.store_id || (alert.store_id === context.store_id && alert.shelf_id === context.shelf_id)));
     } catch (error) {
         document.getElementById("alertList").innerHTML = `<div class="empty-state">Could not load operations: ${escapeHtml(error.message)}</div>`;
     }
@@ -3559,9 +3750,12 @@ document.getElementById("auditForm").addEventListener("submit", async (event) =>
     try {
         const audit = await apiRequest("/audits", { method: "POST", body: form, headers: { "X-User-Role": "auditor" } });
         const analysis = audit.analysis;
-        setCurrentAudit(audit, analysis.restock_candidates.length
-            ? `${analysis.restock_candidates.length} restock reminder(s) found. See the highlighted shelf image below.`
-            : "Analysis complete. See the highlighted shelf image below.");
+        const message = analysis.review_required
+            ? `Detection finished. Check ${analysis.unresolved_detection_count} uncertain product(s) in Human review. Restock reminders will wait until review is complete.`
+            : analysis.restock_candidates.length
+                ? `${analysis.restock_candidates.length} confirmed restock reminder(s) found. See the highlighted shelf image below.`
+                : "Analysis complete. Product identities are confirmed and no restock reminder is needed.";
+        setCurrentAudit(audit, message);
         if (audit.annotated_image_url) {
             annotatedShelfImage.onload = () => auditVisual.scrollIntoView({ behavior: "smooth", block: "nearest" });
         }
@@ -3578,9 +3772,15 @@ document.getElementById("addProductButton").addEventListener("click", addCatalog
 document.getElementById("addSlotButton").addEventListener("click", addPlanogramSlot);
 document.getElementById("loadPlanogramButton").addEventListener("click", loadPlanogram);
 document.getElementById("savePlanogramButton").addEventListener("click", savePlanogram);
-["storeId", "shelfId"].forEach(id => document.getElementById(id).addEventListener("change", refreshOperations));
+document.getElementById("openAuditEvidence").addEventListener("click", () => {
+    document.getElementById("auditEvidencePanel").scrollIntoView({ behavior: "smooth", block: "start" });
+});
+  ["storeId", "shelfId"].forEach(id => document.getElementById(id).addEventListener("change", () => {
+      refreshOperations();
+      loadPlanogram();
+  }));
 
-Promise.all([refreshSystemStatus(), loadCatalogue(), refreshOperations()]).catch(() => {});
+  Promise.all([refreshSystemStatus(), loadCatalogue(), loadPlanogram(), refreshOperations()]).catch(() => {});
 </script>
 
 

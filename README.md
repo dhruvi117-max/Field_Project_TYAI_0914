@@ -13,17 +13,20 @@ human correct uncertain AI results.
 3. OCR tries to read visible packaging text.
 4. The system compares confirmed products and facing counts with the saved
    planogram.
-5. It flags missing, misplaced, low-stock, or uncertain items.
-6. The auditor can correct or remove an uncertain detection.
+5. It holds uncertain product names for a person to check.
+6. Only after review is complete, it creates any low-stock restock reminder.
 7. It saves the audit, alerts, audit events, source photo, boxed image,
    product crops, JSON data, and a printable report.
 
 ## Important limitation
 
 SKU-110K teaches YOLO to find **generic product boxes**. It does not teach the
-model the name of every product. A product identity is only suggested by OCR
-plus the product catalogue. If that is uncertain, the dashboard asks a human
-to review it instead of guessing.
+model the name of every product. Product identity is suggested by OCR plus the
+product catalogue. If that is uncertain, the dashboard asks a human to review
+it instead of guessing. A confirmed review also stores a compact visual
+signature of that pack. Later photos may recognise a very similar pack, while
+unfamiliar or ambiguous packs still go to human review. This is not automatic
+YOLO retraining.
 
 ## Start the project
 
@@ -57,9 +60,9 @@ copy backend\.env.example backend\.env
 
 Open **Planogram, alerts and human review workspace**.
 
-1. Enter a SKU, product name, and words OCR may read from the pack.
+1. Enter a product name and optional words OCR may read from the pack.
 2. Select **Add catalogue product**.
-3. Choose shelf row, product SKU, expected facings, and minimum facings.
+3. Choose planogram name, shelf row, product name, expected facings, and minimum facings.
 4. Select **Add slot** for every product requirement.
 5. Select **Save planogram**.
 
@@ -67,11 +70,10 @@ Example:
 
 | Field | Example |
 | --- | --- |
-| SKU | `COLA-500` |
+| Product name | `Cola 500 ml` |
 | Shelf row | `1` |
 | Expected facings | `4` |
 | Minimum before restock | `2` |
-| Position | `left` |
 
 “Expected” is the ideal count. “Minimum” is the count below which the system
 creates a restock reminder.
@@ -82,21 +84,22 @@ creates a restock reminder.
 2. Check the store, shelf, and auditor details.
 3. Select **Analyse shelf**.
 4. View the real detection boxes on the returned image.
-5. Open the management workspace to see alerts, audit history, and review.
+5. Open the management workspace to complete Human review first, then see confirmed alerts.
 
 ### 3. Review uncertain results
 
-The **Human review queue** shows items whose product identity is uncertain.
+The **Human review** panel shows items whose product identity is uncertain.
 
-- Choose the correct SKU and select **Apply SKU**, or
+- Choose the correct product name and select **Confirm product**, or
 - Select **Remove** if the box is not a valid product facing.
 
-The planogram and restock reminders are recalculated after every human
-decision. The decision is saved in the audit trail.
+The confirmed pack is remembered as a strict visual signature for later shelf
+photos. Restock reminders are recalculated only after all uncertain items have
+been reviewed. Every decision is saved in the audit trail.
 
 ### 4. Open audit evidence
 
-Use **Recent audit evidence** and select **Open** or **Report**.
+After an audit, use **Open this audit record** below the boxed image.
 
 For every new audit, the project saves:
 
@@ -107,6 +110,16 @@ For every new audit, the project saves:
 - printable HTML evidence report
 
 The files are in `data\audit_artifacts\<audit-id>\`.
+
+## Use your own shelf photos for the missing evaluation evidence
+
+Your `photos_eval` folder is for real staged-shelf testing. Keep the images
+private. For each image, count the real products first, run the audit, complete
+Human review, and enter the outcome in
+`photos_eval\evaluation_template.csv`. Take at least one normal, angled and
+low-light photo. This creates honest evidence for count error, mismatch
+precision/recall and viewpoint/low-light robustness. It is not valid to claim
+those measurements until the ground-truth counts are filled in.
 
 ## Current model result
 

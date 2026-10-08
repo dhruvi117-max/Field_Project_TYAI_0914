@@ -40,6 +40,11 @@ def artifact_urls(audit_id: str, detections: list[dict]) -> dict:
 
 def _report_html(audit: dict) -> str:
     analysis = audit["analysis"]
+    review_note = (
+        "Restock reminders are deferred until every uncertain product is reviewed."
+        if analysis.get("restock_blocked_by_review")
+        else "Product review is complete; restock findings below are based on confirmed identities."
+    )
     rows = "".join(
         "<tr>"
         f"<td>{html.escape(str(item.get('detection_id', ''))[:8])}</td>"
@@ -68,9 +73,10 @@ th{{background:#f1e9fb}}.meta{{color:#635975}}img{{max-width:100%;border:1px sol
 <body><h1>Retail Shelf Intelligence — Audit evidence</h1>
 <p class="meta">Audit ID: {html.escape(audit['_id'])} · Store: {html.escape(audit['store_id'])} · Shelf: {html.escape(audit['shelf_id'])}</p>
 <p>Detected facings: <b>{analysis['detection_count']}</b> · Rows: <b>{analysis['row_count']}</b> · Human review: <b>{'Yes' if analysis['review_required'] else 'No'}</b></p>
+<p class="meta">{html.escape(review_note)}</p>
 <h2>Annotated result</h2>{annotated_markup}
 <h2>Planogram findings</h2><ul>{mismatches}</ul>
-<h2>Detection evidence</h2><table><thead><tr><th>ID</th><th>Row</th><th>Confidence</th><th>OCR</th><th>Resolved SKU</th></tr></thead><tbody>{rows}</tbody></table>
+<h2>Detection evidence</h2><table><thead><tr><th>ID</th><th>Row</th><th>Confidence</th><th>OCR</th><th>Confirmed product</th></tr></thead><tbody>{rows}</tbody></table>
 <p class="meta">This report is an automatically generated evidence record. Low-confidence or unreadable items require an auditor decision.</p>
 </body></html>"""
 

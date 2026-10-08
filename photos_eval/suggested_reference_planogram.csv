@@ -1,0 +1,11 @@
+row,product_name,expected_facings,minimum_before_restock,ocr_words
+1,Dettol Hand Sanitizer,1,1,detol hand sanitizer
+1,Rin Detergent Bar,1,1,rin detergent
+1,Medimix Soap,1,1,medimix ayurvedic
+2,Savlon Handwash,1,1,savlon handwash
+2,Bournvita,1,1,bournvita
+2,Parachute Coconut Oil,2,1,parachute coconut oil
+2,Dettol Handwash,1,1,dettol handwash
+3,Palmolive Handwash,1,1,palmolive aroma
+3,Harpic Bathroom Cleaner,1,1,harpic bathroom cleaner
+3,Fiama Shower Gel,1,1,fiama shower gel

@@ -5,6 +5,9 @@ from __future__ import annotations
 import re
 from collections import Counter
 from difflib import SequenceMatcher
+from pathlib import Path
+
+from .visual_memory import resolve_from_visual_memory
 
 
 def normalise(value: str) -> str:
@@ -58,25 +61,6 @@ def resolve_product_labels(detections: list[dict], products: list[dict]) -> list
     return detections
 
 
-def _position_band(item: dict, image_width: int) -> str | None:
-    if image_width <= 0:
-        return None
-    centre = (item["x1"] + item["x2"]) / 2
-    proportion = centre / image_width
-    if proportion < 1 / 3:
-        return "left"
-    if proportion > 2 / 3:
-        return "right"
-    return "centre"
-
-
-def _normalised_position_hint(value: str | None) -> str | None:
-    if not value:
-        return None
-    cleaned = value.strip().lower().replace("center", "centre")
-    return cleaned if cleaned in {"left", "centre", "right"} else None
-
-
 def analyse_planogram(
     detections: list[dict],
     planogram: dict,
@@ -84,15 +68,16 @@ def analyse_planogram(
     image_height: int,
     min_confidence: float,
     image_width: int = 0,
+    source_image_path: Path | None = None,
 ) -> dict:
     assigned = assign_shelf_rows(detections, image_height)
     resolve_product_labels(assigned, products)
+    resolve_from_visual_memory(assigned, products, source_image_path)
     high_confidence = [item for item in assigned if item["confidence"] >= min_confidence]
     labelled = [item for item in high_confidence if item.get("resolved_sku")]
     observed = Counter((item["row"], item["resolved_sku"]) for item in labelled)
     slots = planogram["slots"]
     expected_keys = {(slot["row"], slot["sku"]) for slot in slots}
-    slot_by_key = {(slot["row"], slot["sku"]): slot for slot in slots}
     mismatches: list[dict] = []
     alerts: list[dict] = []
     for slot in slots:
@@ -105,12 +90,12 @@ def analyse_planogram(
                 "type": "restock" if restock_needed else "facing_shortfall",
                 "row": slot["row"],
                 "sku": slot["sku"],
+                "product_name": slot.get("product_name", slot["sku"]),
                 "expected_facings": slot["expected_facings"],
                 "minimum_facings": slot["minimum_facings"],
                 "observed_facings": count,
                 "shortfall": shortfall,
                 "needs_restock": restock_needed,
-                "position_hint": slot.get("position_hint"),
             }
             mismatches.append(mismatch)
             if restock_needed:
@@ -128,21 +113,6 @@ def analyse_planogram(
                 }
             )
             continue
-        slot = slot_by_key[(item["row"], item["resolved_sku"])]
-        expected_position = _normalised_position_hint(slot.get("position_hint"))
-        observed_position = _position_band(item, image_width)
-        if expected_position and observed_position and expected_position != observed_position:
-            mismatches.append(
-                {
-                    "type": "position_deviation",
-                    "row": item["row"],
-                    "sku": item["resolved_sku"],
-                    "detection_id": item["detection_id"],
-                    "expected_position": expected_position,
-                    "observed_position": observed_position,
-                    "needs_restock": False,
-                }
-            )
 
     confidence_values = [item["confidence"] for item in assigned]
     unresolved = [item for item in high_confidence if not item.get("resolved_sku")]
@@ -160,6 +130,11 @@ def analyse_planogram(
         }
         for row in range(1, max((item["row"] for item in assigned), default=0) + 1)
     ]
+    # A potentially empty facing cannot be called a restock issue while the
+    # system still has unnamed high-confidence products in the same photograph.
+    # The candidate list is preserved for explanation, but alerts are deferred
+    # until the reviewer completes the audit.
+    review_required = bool(unresolved)
     return {
         "row_count": max((item["row"] for item in assigned), default=0),
         "detection_count": len(assigned),
@@ -171,9 +146,13 @@ def analyse_planogram(
         "confidence_breakdown": confidence_breakdown,
         "row_summaries": row_summaries,
         "mismatches": mismatches,
-        "restock_candidates": alerts,
-        "review_required": bool(unresolved),
+        "restock_candidates": [] if review_required else alerts,
+        "pending_restock_candidates": alerts if review_required else [],
+        "restock_ready": not review_required,
+        "restock_blocked_by_review": review_required and bool(alerts),
+        "review_required": review_required,
         "review_reason": "Some detected products could not be safely matched to a catalogue SKU."
-        if unresolved
+        " Restock reminders will be calculated after human review."
+        if review_required
         else None,
     }

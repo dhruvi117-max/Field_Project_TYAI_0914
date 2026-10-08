@@ -20,3 +20,9 @@ weights/
 yolo*.pt
 runs/
 mlruns/
+
+# Private staged-shelf evaluation photographs stay on the student's machine.
+photos_eval/*.jpg
+photos_eval/*.jpeg
+photos_eval/*.png
+photos_eval/*.webp

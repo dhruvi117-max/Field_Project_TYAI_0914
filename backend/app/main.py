@@ -81,4 +81,10 @@ async def trace_and_measure_requests(request: Request, call_next):
 
 @app.get("/", include_in_schema=False)
 async def report() -> FileResponse:
-    return FileResponse(FRONTEND_FILE, media_type="text/html")
+    # The dashboard is a single local HTML file that changes frequently during
+    # development. Prevent a browser tab from displaying an older cached UI.
+    return FileResponse(
+        FRONTEND_FILE,
+        media_type="text/html",
+        headers={"Cache-Control": "no-store, max-age=0"},
+    )
